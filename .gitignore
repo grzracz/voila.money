@@ -1,14 +1,14 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+node_modules
 .idea
 
 # testing
 /coverage
 
 # production
-/build
+build
 
 # zip
 /zip
@@ -20,6 +20,3 @@
 .env.test.local
 .env.production.local
 .history
-
-# secrets
-secrets.*.js

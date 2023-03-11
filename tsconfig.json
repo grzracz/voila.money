@@ -15,6 +15,6 @@
     "noEmit": false,
     "jsx": "react"
   },
-  "include": ["src"],
-  "exclude": ["build", "node_modules"]
+  "include": ["core", "extension/src"],
+  "exclude": ["node_modules", "extension/build"]
 }
