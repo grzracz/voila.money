@@ -1,5 +1,6 @@
 module.exports = {
-  content: ['./core/*.{html,js,ts,jsx,tsx}'],
+  content: ['./core/**/*.{html,js,ts,jsx,tsx}'],
+  darkMode: 'class',
   theme: {
     extend: {},
   },

@@ -1,18 +1,18 @@
 import React, { FC } from 'react';
-import './index.css';
+import Navbar from './components/Navbar';
+import { HashRouter, Routes as BrowserRoutes, Route } from 'react-router-dom';
+import Home from './views/Home';
+import Settings from './views/Settings';
 
-interface RoutesProps {
-  display: 'tab' | 'extension' | 'mobile';
-}
-
-const Routes: FC<RoutesProps> = ({ display }) => {
+const Routes: FC = () => {
   return (
-    <div className="text-4xl p-2">
-      This is being displayed in {display}!{' '}
-      <a href={'/wallet.html'} target="_blank">
-        See wallet in tab.
-      </a>
-    </div>
+    <HashRouter>
+      <Navbar />
+      <BrowserRoutes>
+        <Route path="/" element={<Home />} />
+        <Route path="/settings" element={<Settings />} />
+      </BrowserRoutes>
+    </HashRouter>
   );
 };
 

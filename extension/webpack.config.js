@@ -1,6 +1,5 @@
 var webpack = require('webpack'),
   path = require('path'),
-  fileSystem = require('fs-extra'),
   env = require('./utils/env'),
   CopyWebpackPlugin = require('copy-webpack-plugin'),
   HtmlWebpackPlugin = require('html-webpack-plugin'),
@@ -35,12 +34,12 @@ var options = {
   entry: {
     options: path.join(__dirname, 'src', 'pages', 'Wallet', 'index.jsx'),
     popup: path.join(__dirname, 'src', 'pages', 'Popup', 'index.jsx'),
-    background: path.join(__dirname, 'src', 'pages', 'Background', 'index.js'),
-    contentScript: path.join(__dirname, 'src', 'pages', 'Content', 'index.js'),
+    background: path.join(__dirname, 'src', 'scripts', 'background.js'),
+    content: path.join(__dirname, 'src', 'scripts', 'content.js'),
   },
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'build'),
+    path: path.resolve(__dirname, '../build'),
     clean: true,
     publicPath: ASSET_PATH,
   },
@@ -134,7 +133,7 @@ var options = {
       patterns: [
         {
           from: 'extension/src/manifest.json',
-          to: path.join(__dirname, 'build'),
+          to: path.join(__dirname, '../build'),
           force: true,
           transform: function (content, path) {
             // generates the manifest file using the package.json informations
@@ -152,17 +151,8 @@ var options = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: 'extension/src/pages/Content/content.styles.css',
-          to: path.join(__dirname, 'build'),
-          force: true,
-        },
-      ],
-    }),
-    new CopyWebpackPlugin({
-      patterns: [
-        {
           from: 'core/assets/favicons/16.png',
-          to: path.join(__dirname, 'build'),
+          to: path.join(__dirname, '../build'),
           force: true,
         },
       ],
@@ -171,7 +161,7 @@ var options = {
       patterns: [
         {
           from: 'core/assets/favicons/32.png',
-          to: path.join(__dirname, 'build'),
+          to: path.join(__dirname, '../build'),
           force: true,
         },
       ],
@@ -180,7 +170,7 @@ var options = {
       patterns: [
         {
           from: 'core/assets/favicons/48.png',
-          to: path.join(__dirname, 'build'),
+          to: path.join(__dirname, '../build'),
           force: true,
         },
       ],
@@ -189,7 +179,7 @@ var options = {
       patterns: [
         {
           from: 'core/assets/favicons/64.png',
-          to: path.join(__dirname, 'build'),
+          to: path.join(__dirname, '../build'),
           force: true,
         },
       ],
@@ -198,7 +188,7 @@ var options = {
       patterns: [
         {
           from: 'core/assets/favicons/96.png',
-          to: path.join(__dirname, 'build'),
+          to: path.join(__dirname, '../build'),
           force: true,
         },
       ],
@@ -207,7 +197,7 @@ var options = {
       patterns: [
         {
           from: 'core/assets/favicons/128.png',
-          to: path.join(__dirname, 'build'),
+          to: path.join(__dirname, '../build'),
           force: true,
         },
       ],
@@ -215,8 +205,44 @@ var options = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: 'core/assets/favicons/icon.png',
-          to: path.join(__dirname, 'build'),
+          from: 'core/assets/fonts/Comfortaa-Bold.ttf',
+          to: path.join(__dirname, '../build'),
+          force: true,
+        },
+      ],
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'core/assets/fonts/Comfortaa-Light.ttf',
+          to: path.join(__dirname, '../build'),
+          force: true,
+        },
+      ],
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'core/assets/fonts/Comfortaa-Medium.ttf',
+          to: path.join(__dirname, '../build'),
+          force: true,
+        },
+      ],
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'core/assets/fonts/Comfortaa-Regular.ttf',
+          to: path.join(__dirname, '../build'),
+          force: true,
+        },
+      ],
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'core/assets/fonts/Comfortaa-SemiBold.ttf',
+          to: path.join(__dirname, '../build'),
           force: true,
         },
       ],

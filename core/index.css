@@ -1,3 +1,135 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('assets/fonts/Comfortaa-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('assets/fonts/Comfortaa-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('assets/fonts/Comfortaa-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('assets/fonts/Comfortaa-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('assets/fonts/Comfortaa-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+:root {
+  --background-color-light: #EDF2F4;
+  --background-color-dark: #2B2D42;
+  --text-color-light: #2B2D42;
+  --text-color-dark: #EDF2F4;
+  --link-color-light: #5DADE2;
+  --link-color-dark: #5DADE2;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Comfortaa', sans-serif;
+  margin: 0;
+  padding: 0;
+  color: var(--text-color-light);
+  background-color: var(--background-color-light);
+  line-height: 1.5;
+  transition: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  opacity: 80%;
+}
+
+body:not(.dark) {
+  color: var(--text-color-light);
+  background-color: var(--background-color-light);
+}
+
+body:not(.dark) h1,
+body:not(.dark) h2,
+body:not(.dark) h3,
+body:not(.dark) h4,
+body:not(.dark) h5,
+body:not(.dark) h6 {
+  color: var(--text-color-light);
+}
+
+body:not(.dark) a {
+  color: var(--link-color-light);
+}
+
+@media (prefers-color-scheme: dark) {
+  body:not(.dark) {
+    color: var(--text-color-dark);
+    background-color: var(--background-color-dark);
+  }
+
+  body:not(.dark) h1,
+  body:not(.dark) h2,
+  body:not(.dark) h3,
+  body:not(.dark) h4,
+  body:not(.dark) h5,
+  body:not(.dark) h6 {
+    color: var(--text-color-dark);
+  }
+
+  body:not(.dark) a {
+    color: var(--link-color-dark);
+  }
+}
+
+body.dark {
+  color: var(--text-color-dark);
+  background-color: var(--background-color-dark);
+}
+
+body.dark h1,
+body.dark h2,
+body.dark h3,
+body.dark h4,
+body.dark h5,
+body.dark h6 {
+  color: var(--text-color-dark);
+}
+
+body.dark a {
+  color: var(--link-color-dark);
+}
+
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+}

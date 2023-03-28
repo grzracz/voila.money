@@ -15,6 +15,6 @@
     "noEmit": false,
     "jsx": "react"
   },
-  "include": ["core", "extension/src"],
+  "include": ["core", "extension/src", "custom.d.ts"],
   "exclude": ["node_modules", "extension/build"]
 }
