@@ -88,10 +88,6 @@ body:not(.dark) h6 {
   color: var(--text-color-light);
 }
 
-body:not(.dark) a {
-  color: var(--link-color-light);
-}
-
 @media (prefers-color-scheme: dark) {
   body:not(.dark) {
     color: var(--text-color-dark);
@@ -124,10 +120,6 @@ body.dark h4,
 body.dark h5,
 body.dark h6 {
   color: var(--text-color-dark);
-}
-
-body.dark a {
-  color: var(--link-color-dark);
 }
 
 * {

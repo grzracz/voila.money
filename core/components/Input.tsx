@@ -1,70 +1,77 @@
-import React, { InputHTMLAttributes } from 'react';
+import React, { FC } from 'react';
+import { IoClose } from 'react-icons/io5';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  label: string;
-  inputType?: 'text' | 'password' | 'email';
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+interface InputProps {
+  value?: string;
+  onChange: (value: string) => void;
+  onEnter?: () => void;
+  className?: string;
   placeholder?: string;
-  prefix?: string;
-  suffix?: string;
   icon?: React.ReactNode;
+  type?: string;
+  onClear?: () => void;
+  showClear?: boolean;
+  disableMaxWidth?: boolean;
+  replaceClear?: React.ReactNode;
+  noPadding?: boolean;
+  onFocus?: string;
+  disabled?: boolean;
 }
 
-const Input: React.FC<InputProps> = React.memo(
-  ({
-    label,
-    inputType = 'text',
-    name,
-    value,
-    onChange,
-    placeholder,
-    prefix,
-    suffix,
-    icon,
-    ...rest
-  }) => {
-    return (
-      <div className="flex flex-col mb-4">
-        <label
-          htmlFor={name}
-          className="mb-2 text-sm font-semibold text-gray-700"
-        >
-          {label}
-        </label>
-        <div className="relative">
-          {prefix && (
-            <div className="absolute left-0 top-0 flex items-center h-full px-3 text-gray-600">
-              {prefix}
-            </div>
+const Input: FC<InputProps> = ({
+  value,
+  onChange,
+  className,
+  placeholder,
+  icon,
+  type,
+  onEnter,
+  onClear,
+  showClear,
+  disableMaxWidth,
+  replaceClear,
+  noPadding,
+  onFocus,
+  disabled,
+}) => {
+  const handleKeyDown = (e) => {
+    if (onEnter && e.key === 'Enter') onEnter();
+  };
+
+  return (
+    <div
+      className="flex px-2 sm:px-3 rounded-full w-full space-x-2 items-center relative"
+      style={{
+        maxWidth: disableMaxWidth ? '100%' : '16rem',
+      }}
+    >
+      {icon && icon}
+      <input
+        className={
+          'bg-transparent py-1 sm:py-2 w-full max-w-full overflow-hidden'
+        }
+        value={value}
+        onChange={(event) => onChange(event.target.value || '')}
+        placeholder={placeholder}
+        type={type}
+        onKeyDown={handleKeyDown}
+        onFocus={onFocus as unknown as any}
+        disabled={disabled}
+      />
+      {replaceClear
+        ? replaceClear
+        : (showClear !== undefined ? showClear : value !== '') && (
+            <IoClose
+              className="absolute right-2 sm:right-4 hover:opacity-80 transition-all cursor-pointer"
+              onClick={(event) => {
+                event.stopPropagation();
+                onChange('');
+                if (onClear) onClear();
+              }}
+            />
           )}
-          {icon && (
-            <div className="absolute left-0 top-0 flex items-center h-full px-3 text-gray-600">
-              {icon}
-            </div>
-          )}
-          <input
-            type={inputType}
-            name={name}
-            id={name}
-            value={value}
-            onChange={onChange}
-            placeholder={placeholder}
-            className={`border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:border-indigo-500 ${
-              prefix || icon ? 'pl-10' : ''
-            } ${suffix ? 'pr-10' : ''}`}
-            {...rest}
-          />
-          {suffix && (
-            <div className="absolute right-0 top-0 flex items-center h-full px-3 text-gray-600">
-              {suffix}
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
-);
+    </div>
+  );
+};
 
 export default Input;

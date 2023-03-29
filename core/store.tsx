@@ -1,8 +1,10 @@
 import React, { createContext, useReducer, useContext } from 'react';
+import { CryptoStorage } from '@webcrypto/storage';
 
 interface State {
   display: 'tab' | 'extension' | 'mobile';
   theme: 'dark' | 'light';
+  storage?: CryptoStorage;
 }
 
 interface Action {

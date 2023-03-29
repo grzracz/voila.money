@@ -9,11 +9,9 @@ interface AppProps {
 
 const App: FC<AppProps> = ({ display }) => {
   return (
-    <div style={{ minWidth: 320 }}>
-      <StoreProvider display={display}>
-        <Routes />
-      </StoreProvider>
-    </div>
+    <StoreProvider display={display}>
+      <Routes />
+    </StoreProvider>
   );
 };
 
