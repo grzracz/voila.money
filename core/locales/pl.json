@@ -1,0 +1,28 @@
+{
+  "components": {
+    "Navbar": {
+      "Settings": "Ustawienia",
+      "Lock": "Zablokuj portfel"
+    },
+    "Sidebar": {
+      "Assets": "Aktywa",
+      "NFTs": "NFT",
+      "Explore": "Przeglądaj",
+      "Activity": "Aktywność"
+    }
+  },
+  "view": {
+    "Login": {
+      "PasswordMismatch": "Hasła się nie zgadzają! Spróbuj ponownie?",
+      "SomethingWentWrong": "Wystąpił błąd podczas próby logowania.",
+      "WelcomeBack": "Witaj ponownie!",
+      "Welcome": "Witaj!",
+      "EnterPassword": "Wprowadź swoje hasło",
+      "SetupPassword": "Ustaw swoje hasło",
+      "PasswordRequirements": " - co najmniej 8 znaków",
+      "Password": "Hasło",
+      "ConfirmPassword": "Potwierdź hasło",
+      "Enter": "Wejdź"
+    }
+  }
+}

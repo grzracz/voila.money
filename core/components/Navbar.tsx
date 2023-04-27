@@ -13,8 +13,10 @@ import {
 import { ActionTypes, useStore } from '../store';
 import { Link, NavLink } from 'react-router-dom';
 import IconButton from './IconButton';
+import { useTranslation } from 'react-i18next';
 
 const Navbar: React.FC = () => {
+  const { t } = useTranslation();
   const { state, dispatch } = useStore();
   const isDark = state.theme === 'dark';
 
@@ -34,7 +36,7 @@ const Navbar: React.FC = () => {
             <img
               className="h-6 md:h-8 w-auto select-none cursor-pointer"
               src={(isDark ? logoDark : logoLight) as unknown as string}
-              alt={`Logo`}
+              alt={'Logo'}
             />
           </Link>
         </div>
@@ -52,7 +54,9 @@ const Navbar: React.FC = () => {
               {state.signedIn && (
                 <>
                   <NavLink
-                    title={`Settings`}
+                    title={
+                      t('components.Navbar.Settings', 'Settings') as string
+                    }
                     to={'/settings'}
                     className={({ isActive, isPending }) => {
                       const baseClasses =
@@ -77,7 +81,7 @@ const Navbar: React.FC = () => {
                   <IconButton
                     onClick={lock}
                     IconComponent={IoLockClosed}
-                    name={`Lock screen`}
+                    name={t('components.Navbar.Lock', 'Lock wallet')}
                   />
                 </>
               )}

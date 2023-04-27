@@ -9,8 +9,10 @@ import { IoEnter } from 'react-icons/io5';
 import { StorageKeys } from '../../../extension/src/scripts/storage';
 import { SecureStorage } from '../../utils/storage';
 import { toast } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 const Login: React.FC = () => {
+  const { t } = useTranslation();
   const { state, dispatch } = useStore();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -47,10 +49,17 @@ const Login: React.FC = () => {
             (await SecureStorage.get(StorageKeys.addresses, password)) || [],
         });
       } else {
-        toast.error('Password mismatch! Retry?');
+        toast.error(
+          t('view.Login.PasswordMismatch', 'Password mismatch! Retry?')
+        );
       }
     } catch (e) {
-      toast.error('Something went wrong while trying to login.');
+      toast.error(
+        t(
+          'view.Login.SomethingWentWrong',
+          'Something went wrong while trying to login.'
+        )
+      );
     }
   };
 
@@ -72,16 +81,22 @@ const Login: React.FC = () => {
       {passwordSet !== undefined && (
         <>
           <h1 className="text-2xl md:text-4xl font-bold">
-            Welcome{passwordSet ? ' back' : ''}!
+            {passwordSet
+              ? t('view.Login.WelcomeBack', 'Welcome back!')
+              : t('view.Login.Welcome', 'Welcome!')}
           </h1>
           <h1 className="text-md md:text-lg font-light">
-            {passwordSet ? 'Enter' : 'Set up'} your password
-            {!passwordSet && ' - at least 8 characters'}
+            {passwordSet
+              ? t('view.Login.EnterPassword', 'Enter your password')
+              : t(
+                  'view.Login.SetupPassword',
+                  'Set up your password - at least 8 characters'
+                )}
           </h1>
           <div className="text-center pt-8 flex space-x-2 items-center">
             <Input
               type="password"
-              placeholder="Password"
+              placeholder={t('view.Login.Password', 'Password') as string}
               value={password}
               onChange={setPassword}
               showClear={false}
@@ -92,7 +107,9 @@ const Login: React.FC = () => {
             <div className="text-center pt-4 flex space-x-2 items-center">
               <Input
                 type="password"
-                placeholder="Confirm password"
+                placeholder={
+                  t('view.Login.ConfirmPassword', 'Confirm password') as string
+                }
                 value={confirmPassword}
                 onChange={setConfirmPassword}
                 showClear={false}
@@ -111,7 +128,7 @@ const Login: React.FC = () => {
                 password.length < 8
               }
             >
-              <span>Enter</span>
+              <span>{t('view.Login.Enter', 'Enter')}</span>
             </IconButton>
           </div>
         </>

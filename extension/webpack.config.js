@@ -151,6 +151,15 @@ var options = {
     new CopyWebpackPlugin({
       patterns: [
         {
+          from: 'core/locales/',
+          to: path.join(__dirname, '../build/locales/'),
+          force: true,
+        },
+      ],
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
           from: 'core/assets/favicons/icon.png',
           to: path.join(__dirname, '../build'),
           force: true,

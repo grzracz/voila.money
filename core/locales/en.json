@@ -1,0 +1,27 @@
+{
+  "components": {
+    "Navbar": {
+      "Settings": "Settings",
+      "Lock": "Lock wallet"
+    },
+    "Sidebar": {
+      "Assets": "Assets",
+      "NFTs": "NFTs",
+      "Explore": "Explore",
+      "Activity": "Activity"
+    }
+  },
+  "view": {
+    "Login": {
+      "PasswordMismatch": "Password mismatch! Retry?",
+      "SomethingWentWrong": "Something went wrong while trying to login.",
+      "WelcomeBack": "Welcome back!",
+      "Welcome": "Welcome!",
+      "EnterPassword": "Enter your password",
+      "SetupPassword": "Set up your password - at least 8 characters",
+      "Password": "Password",
+      "ConfirmPassword": "Confirm password",
+      "Enter": "Enter"
+    }
+  }
+}

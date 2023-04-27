@@ -1,0 +1,27 @@
+{
+  "components": {
+    "Navbar": {
+      "Settings": "Configuración",
+      "Lock": "Bloquear cartera"
+    },
+    "Sidebar": {
+      "Assets": "Activos",
+      "NFTs": "NFTs",
+      "Explore": "Explorar",
+      "Activity": "Actividad"
+    }
+  },
+  "view": {
+    "Login": {
+      "PasswordMismatch": "¡Las contraseñas no coinciden! ¿Reintentar?",
+      "SomethingWentWrong": "Algo salió mal al intentar iniciar sesión.",
+      "WelcomeBack": "¡Bienvenido de nuevo!",
+      "Welcome": "¡Bienvenido!",
+      "EnterPassword": "Ingresa tu contraseña",
+      "SetupPassword": "Establece tu contraseña - al menos 8 caracteres",
+      "Password": "Contraseña",
+      "ConfirmPassword": "Confirmar contraseña",
+      "Enter": "Entrar"
+    }
+  }
+}

@@ -26,20 +26,18 @@ const Routes: FC = () => {
         />
         <Navbar />
         {state.signedIn ? (
-          <>
-            <div className="flex-grow flex">
-              <Sidebar />
-              <div className="p-2 md:p-4">
-                <BrowserRoutes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/settings" element={<Settings />} />
-                  <Route path="/nfts" element={<NFTs />} />
-                  <Route path="/explore" element={<Explore />} />
-                  <Route path="/activity" element={<Activity />} />
-                </BrowserRoutes>
-              </div>
+          <div className="flex-grow flex">
+            <Sidebar />
+            <div className="p-2 md:p-4">
+              <BrowserRoutes>
+                <Route path="/" element={<Home />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/nfts" element={<NFTs />} />
+                <Route path="/explore" element={<Explore />} />
+                <Route path="/activity" element={<Activity />} />
+              </BrowserRoutes>
             </div>
-          </>
+          </div>
         ) : (
           <Login />
         )}
