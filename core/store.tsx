@@ -1,10 +1,11 @@
 import React, { createContext, useReducer, useContext } from 'react';
-import { CryptoStorage } from '@webcrypto/storage';
 
 interface State {
   display: 'tab' | 'extension' | 'mobile';
   theme: 'dark' | 'light';
-  storage?: CryptoStorage;
+  signedIn: boolean;
+  primaryAddress?: string;
+  addresses?: string[];
 }
 
 interface Action {
@@ -15,10 +16,13 @@ interface Action {
 const initialState: State = {
   display: 'mobile',
   theme: 'light',
+  signedIn: false,
 };
 
 export const ActionTypes = {
   TOGGLE_THEME: 'TOGGLE_THEME',
+  UPDATE_DATA: 'UPDATE_DATA',
+  LOCK: 'LOCK',
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -28,6 +32,10 @@ const reducer = (state: State, action: Action): State => {
       document.body.classList.toggle('dark', !isDark);
       localStorage.setItem('theme', isDark ? 'light' : 'dark');
       return { ...state, theme: isDark ? 'light' : 'dark' };
+    case ActionTypes.UPDATE_DATA:
+      return { ...state, [action.payload?.name]: action.payload?.data };
+    case ActionTypes.LOCK:
+      return initializeStore(state.display);
     default:
       return state;
   }
@@ -59,6 +67,7 @@ const initializeStore = (display: 'tab' | 'extension' | 'mobile'): State => {
   const theme = getInitialTheme();
 
   return {
+    ...initialState,
     display,
     theme,
   };

@@ -38,12 +38,12 @@
 }
 
 :root {
-  --background-color-light: #EDF2F4;
-  --background-color-dark: #2B2D42;
-  --text-color-light: #2B2D42;
-  --text-color-dark: #EDF2F4;
-  --link-color-light: #5DADE2;
-  --link-color-dark: #5DADE2;
+  --background-color-light: #edf2f4;
+  --background-color-dark: #2b2d42;
+  --text-color-light: #2b2d42;
+  --text-color-dark: #edf2f4;
+  --link-color-light: #5dade2;
+  --link-color-dark: #5dade2;
 }
 
 html {
@@ -60,7 +60,12 @@ body {
   transition: none;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin-top: 0;
   margin-bottom: 0.5rem;
 }
@@ -123,5 +128,6 @@ body.dark h6 {
 }
 
 * {
-  transition: background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease,
+    opacity 0.2s ease;
 }

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, KeyboardEventHandler } from 'react';
 import { IoClose } from 'react-icons/io5';
 
 interface InputProps {
@@ -34,27 +34,27 @@ const Input: FC<InputProps> = ({
   onFocus,
   disabled,
 }) => {
-  const handleKeyDown = (e) => {
-    if (onEnter && e.key === 'Enter') onEnter();
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (onEnter && event.key === 'Enter') onEnter();
   };
 
   return (
     <div
-      className="flex px-2 sm:px-3 rounded-full w-full space-x-2 items-center relative"
+      className={`flex px-2 sm:px-3 rounded-full w-full space-x-2 items-center relative ${className}`}
       style={{
         maxWidth: disableMaxWidth ? '100%' : '16rem',
       }}
     >
       {icon && icon}
       <input
-        className={
-          'bg-transparent py-1 sm:py-2 w-full max-w-full overflow-hidden'
-        }
+        className={`bg-transparent py-1 sm:py-2 w-full max-w-full overflow-hidden text-gray-700 dark:text-gray-300 placeholder-gray-500 dark:placeholder-gray-400 rounded-full border-2 border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-500 dark:focus:border-blue-600 transition-all ${
+          noPadding ? '' : 'px-3'
+        }`}
         value={value}
         onChange={(event) => onChange(event.target.value || '')}
         placeholder={placeholder}
         type={type}
-        onKeyDown={handleKeyDown}
+        onKeyDown={handleKeyDown as unknown as KeyboardEventHandler}
         onFocus={onFocus as unknown as any}
         disabled={disabled}
       />

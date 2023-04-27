@@ -34,8 +34,8 @@ var options = {
   entry: {
     options: path.join(__dirname, 'src', 'pages', 'Wallet', 'index.jsx'),
     popup: path.join(__dirname, 'src', 'pages', 'Popup', 'index.jsx'),
-    background: path.join(__dirname, 'src', 'scripts', 'background.js'),
-    content: path.join(__dirname, 'src', 'scripts', 'content.js'),
+    background: path.join(__dirname, 'src', 'scripts', 'background.ts'),
+    content: path.join(__dirname, 'src', 'scripts', 'content.ts'),
   },
   output: {
     filename: '[name].bundle.js',

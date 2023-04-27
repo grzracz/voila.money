@@ -6,6 +6,7 @@
   "background": {
     "service_worker": "background.bundle.js"
   },
+  "permissions": ["background", "storage"],
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icon.png"

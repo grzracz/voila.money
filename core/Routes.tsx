@@ -9,9 +9,10 @@ import Explore from './views/Explore';
 import Activity from './views/Activity';
 import { useStore } from './store';
 import Login from './views/Login';
+import { Toaster } from 'react-hot-toast';
 
 const Routes: FC = () => {
-  const { state, dispatch } = useStore();
+  const { state } = useStore();
 
   return (
     <HashRouter>
@@ -19,9 +20,13 @@ const Routes: FC = () => {
         className="min-w-[320px] flex flex-col"
         style={{ minHeight: 'clamp(568px, 100vh, 100vh)' }}
       >
-        {state.storage ? (
+        <Toaster
+          position={state.display === 'tab' ? 'bottom-right' : 'top-center'}
+          reverseOrder
+        />
+        <Navbar />
+        {state.signedIn ? (
           <>
-            <Navbar />
             <div className="flex-grow flex">
               <Sidebar />
               <div className="p-2 md:p-4">
