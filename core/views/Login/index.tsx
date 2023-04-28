@@ -10,6 +10,7 @@ import { StorageKeys } from '../../../extension/src/scripts/storage';
 import { SecureStorage } from '../../utils/storage';
 import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
+import { FaSignInAlt } from 'react-icons/fa';
 
 const Login: React.FC = () => {
   const { t } = useTranslation();
@@ -119,7 +120,7 @@ const Login: React.FC = () => {
           )}
           <div className="max-w-min pt-8">
             <IconButton
-              IconComponent={IoEnter}
+              IconComponent={FaSignInAlt}
               name={'Enter'}
               onClick={login}
               disabled={

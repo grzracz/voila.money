@@ -3,13 +3,12 @@ import logoLight from '../assets/text-light.svg';
 import logoDark from '../assets/text-dark.svg';
 import Switch from './Switch';
 import {
-  IoLockClosed,
-  IoMoon,
-  IoOpenOutline,
-  IoSettingsOutline,
-  IoSunny,
-} from 'react-icons/io5';
-
+  FaSun,
+  FaMoon,
+  FaLock,
+  FaCog,
+  FaExternalLinkAlt,
+} from 'react-icons/fa';
 import { ActionTypes, useStore } from '../store';
 import { Link, NavLink } from 'react-router-dom';
 import IconButton from './IconButton';
@@ -48,8 +47,8 @@ const Navbar: React.FC = () => {
                 name={'toggle-theme'}
                 checked={isDark}
                 onChange={toggleTheme}
-                iconOff={<IoSunny size="0.8rem" />}
-                iconOn={<IoMoon size="0.8rem" />}
+                iconOff={<FaSun size="0.8rem" />}
+                iconOn={<FaMoon size="0.8rem" />}
               />
               {state.signedIn && (
                 <>
@@ -76,11 +75,11 @@ const Navbar: React.FC = () => {
                         : `${baseClasses} ${inactiveClasses}`;
                     }}
                   >
-                    <IoSettingsOutline size="1.2rem" />
+                    <FaCog size="1.2rem" />
                   </NavLink>
                   <IconButton
                     onClick={lock}
-                    IconComponent={IoLockClosed}
+                    IconComponent={FaLock}
                     name={t('components.Navbar.Lock', 'Lock wallet')}
                   />
                 </>
@@ -88,7 +87,7 @@ const Navbar: React.FC = () => {
             </>
           ) : (
             <a href="/wallet.html" target="_blank" className="text-blue-400">
-              <IoOpenOutline size="1.2rem" />
+              <FaExternalLinkAlt size="1.2rem" />
             </a>
           )}
         </div>

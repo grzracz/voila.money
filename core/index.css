@@ -46,6 +46,10 @@
   --link-color-dark: #5dade2;
 }
 
+.blue {
+  color: #5dade2;
+}
+
 html {
   font-size: 16px;
 }

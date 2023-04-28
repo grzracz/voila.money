@@ -1,5 +1,5 @@
 import React, { FC, KeyboardEventHandler } from 'react';
-import { IoClose } from 'react-icons/io5';
+import { FaTimes } from 'react-icons/fa';
 
 interface InputProps {
   value?: string;
@@ -61,7 +61,7 @@ const Input: FC<InputProps> = ({
       {replaceClear
         ? replaceClear
         : (showClear !== undefined ? showClear : value !== '') && (
-            <IoClose
+            <FaTimes
               className="absolute right-2 sm:right-4 hover:opacity-80 transition-all cursor-pointer"
               onClick={(event) => {
                 event.stopPropagation();
