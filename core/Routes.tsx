@@ -10,6 +10,10 @@ import Activity from './views/Activity';
 import { useStore } from './store';
 import Login from './views/Login';
 import { Toaster } from 'react-hot-toast';
+import Accounts from './views/Accounts';
+import Backup from './views/Accounts/Backup';
+import Create from './views/Accounts/Create';
+import Mnemonic from './views/Accounts/Mnemonic';
 
 const Routes: FC = () => {
   const { state } = useStore();
@@ -27,15 +31,28 @@ const Routes: FC = () => {
         <Navbar />
         {state.signedIn ? (
           <div className="flex-grow flex">
-            <Sidebar />
-            <div className="p-2 md:p-4">
-              <BrowserRoutes>
-                <Route path="/" element={<Home />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/nfts" element={<NFTs />} />
-                <Route path="/explore" element={<Explore />} />
-                <Route path="/activity" element={<Activity />} />
-              </BrowserRoutes>
+            <Sidebar disabled={state.addresses.length === 0} />
+            <div className="p-2 md:p-4 w-full flex justify-center">
+              <div className="w-full max-w-screen-2xl">
+                <BrowserRoutes>
+                  <Route
+                    index
+                    element={
+                      state.addresses.length > 0 ? <Home /> : <Accounts />
+                    }
+                  />
+                  <Route path="settings" element={<Settings />} />
+                  <Route path="nfts" element={<NFTs />} />
+                  <Route path="explore" element={<Explore />} />
+                  <Route path="activity" element={<Activity />} />
+                  <Route path="accounts">
+                    <Route index element={<Accounts />} />
+                    <Route path="create" element={<Create />} />
+                    <Route path="mnemonic" element={<Mnemonic />} />
+                    <Route path="backup" element={<Backup />} />
+                  </Route>
+                </BrowserRoutes>
+              </div>
             </div>
           </div>
         ) : (

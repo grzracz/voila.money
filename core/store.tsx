@@ -5,7 +5,7 @@ interface State {
   theme: 'dark' | 'light';
   signedIn: boolean;
   primaryAddress?: string;
-  addresses?: string[];
+  addresses: string[];
 }
 
 interface Action {
@@ -17,6 +17,7 @@ const initialState: State = {
   display: 'mobile',
   theme: 'light',
   signedIn: false,
+  addresses: [],
 };
 
 export const ActionTypes = {

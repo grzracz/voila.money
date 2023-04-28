@@ -8,7 +8,7 @@ import {
 } from 'react-icons/md';
 import { useTranslation } from 'react-i18next';
 
-const Sidebar: React.FC = () => {
+const Sidebar: React.FC<{ disabled: boolean }> = ({ disabled }) => {
   const { t } = useTranslation();
 
   return (
@@ -17,21 +17,25 @@ const Sidebar: React.FC = () => {
         IconComponent={MdAccountBalance}
         name={t('components.Sidebar.Assets', 'Assets')}
         to="/"
+        disabled={disabled}
       />
       <SidebarLink
         IconComponent={MdPhoto}
         name={t('components.Sidebar.NFTs', 'NFTs')}
         to="/nfts"
+        disabled={disabled}
       />
       <SidebarLink
         IconComponent={MdExplore}
         name={t('components.Sidebar.Explore', 'Explore')}
         to="/explore"
+        disabled={disabled}
       />
       <SidebarLink
         IconComponent={MdAccessTime}
         name={t('components.Sidebar.Activity', 'Activity')}
         to="/activity"
+        disabled={disabled}
       />
     </aside>
   );
