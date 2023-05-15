@@ -24,10 +24,6 @@ const Routes: FC = () => {
         className="min-w-[320px] flex flex-col"
         style={{ minHeight: 'clamp(568px, 100vh, 100vh)' }}
       >
-        <Toaster
-          position={state.display === 'tab' ? 'bottom-right' : 'top-center'}
-          reverseOrder
-        />
         <Navbar />
         {state.signedIn ? (
           <div className="flex-grow flex">

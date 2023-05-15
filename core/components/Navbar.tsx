@@ -26,8 +26,12 @@ const Navbar: React.FC = () => {
   };
 
   const lock = async () => {
-    await storage.lock();
-    dispatch(ActionTypes.LOCK);
+    try {
+      dispatch(ActionTypes.LOCK);
+      await storage.lock();
+    } catch (e) {
+      console.error('Error while locking:', e);
+    }
   };
 
   return (

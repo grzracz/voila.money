@@ -4,12 +4,15 @@ import Avatar from '../../../components/Avatar';
 import AccountName from '../../../components/AccountName';
 import IconButton from '../../../components/IconButton';
 import { FaRedo, FaSave, FaTimes } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useSecureStorage } from '../../../utils/storage';
+import { ActionTypes, useStore } from '../../../utils/store';
 
 const Create: React.FC = () => {
   const storage = useSecureStorage();
+  const { dispatch } = useStore();
+  const navigate = useNavigate();
   const [account, setAccount] = useState<algosdk.Account>();
 
   const createAccount = () => {
@@ -19,8 +22,19 @@ const Create: React.FC = () => {
   const saveAccount = async () => {
     if (account) {
       try {
-        await storage.addAccount(algosdk.secretKeyToMnemonic(account.sk));
+        const [primaryAddress, addresses] = await storage.addAccount(
+          algosdk.secretKeyToMnemonic(account.sk)
+        );
+        dispatch(ActionTypes.UPDATE_DATA, {
+          name: 'primaryAddress',
+          data: primaryAddress,
+        });
+        dispatch(ActionTypes.UPDATE_DATA, {
+          name: 'addresses',
+          data: addresses,
+        });
         toast.success('Account saved!');
+        navigate('/');
       } catch (e) {
         console.error(e);
         toast.error('Something went wrong while saving account');

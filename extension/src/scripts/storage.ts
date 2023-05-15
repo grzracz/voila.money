@@ -37,7 +37,8 @@ async function updateStorageTimeout() {
   if (storageExpiry) clearTimeout(storageExpiry);
   storageExpiry = setTimeout(() => {
     storage = null;
-  }, 1000 * STORAGE_TIMEOUT_SECONDS);
+    // delay clear so the app has a chance to call it without error
+  }, 1000 * (STORAGE_TIMEOUT_SECONDS + 1));
 }
 
 async function set<T>(name: string, value: T): Promise<void> {
@@ -135,22 +136,31 @@ export async function getPrimaryAddress(): Promise<string | null> {
   return await get(StorageKeys.primaryAddress);
 }
 
+export async function setPrimaryAddress(data: {
+  address: string;
+}): Promise<void> {
+  await set(StorageKeys.primaryAddress, data.address);
+}
+
 export async function getAddresses(): Promise<string[]> {
   return (await get(StorageKeys.addresses)) || [];
 }
 
 export async function addAccount(data: {
   mnemonic: string;
-}): Promise<string[]> {
+}): Promise<[string, string[]]> {
   const account = algosdk.mnemonicToSecretKey(data.mnemonic);
   await set(account.addr, data.mnemonic);
   const addresses: string[] = [
     ...((await get<string[]>(StorageKeys.addresses)) || []),
     account.addr,
   ];
-  console.log(addresses);
   await set(StorageKeys.addresses, addresses);
-  return addresses;
+  const primaryAddress = await getPrimaryAddress();
+  if (!primaryAddress) {
+    setPrimaryAddress({ address: account.addr });
+  }
+  return [primaryAddress || account.addr, addresses];
 }
 
 export async function removeAccount(data: {
