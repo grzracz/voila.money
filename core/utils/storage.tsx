@@ -14,6 +14,7 @@ export const SecureMessageTypes = {
   setPassword: 'setPassword',
   verifyPassword: 'verifyPassword',
   isPasswordSet: 'isPasswordSet',
+  setPrimaryAddress: 'setPrimaryAddress',
   getPrimaryAddress: 'getPrimaryAddress',
   getAddresses: 'getAddresses',
   addAccount: 'addAccount',
@@ -52,7 +53,8 @@ export class SecureStorage {
 
   private async handleMessage(type: string, data?: object) {
     const response = await browser.runtime.sendMessage({ type, data });
-    if (response.success) {
+    console.log(response);
+    if (response && response.success) {
       if (
         ![
           SecureMessageTypes.setPassword,
@@ -64,7 +66,7 @@ export class SecureStorage {
         this.refreshStorageTimeout();
       return response.result;
     } else {
-      throw new Error(response.error);
+      throw new Error(response?.error || 'No response from background script.');
     }
   }
 
@@ -131,7 +133,13 @@ export class SecureStorage {
     return await this.handleMessage(SecureMessageTypes.isPasswordSet);
   }
 
-  async getPrimaryAddress(): Promise<string[]> {
+  async setPrimaryAddress(address: string): Promise<void> {
+    return await this.handleMessage(SecureMessageTypes.setPrimaryAddress, {
+      address,
+    });
+  }
+
+  async getPrimaryAddress(): Promise<string | null> {
     return await this.handleMessage(SecureMessageTypes.getPrimaryAddress);
   }
 
@@ -139,13 +147,13 @@ export class SecureStorage {
     return await this.handleMessage(SecureMessageTypes.getAddresses);
   }
 
-  async addAccount(mnemonic: string): Promise<string[]> {
+  async addAccount(mnemonic: string): Promise<[string, string[]]> {
     return await this.handleMessage(SecureMessageTypes.addAccount, {
       mnemonic,
     });
   }
 
-  async removeAccount(address: string): Promise<string[]> {
+  async removeAccount(address: string): Promise<[string | null, string[]]> {
     return await this.handleMessage(SecureMessageTypes.removeAccount, {
       address,
     });

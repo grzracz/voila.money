@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import MersenneTwister from 'mersenne-twister';
+import { classNames } from '../utils/common';
 
 const icons: Record<string, string> = {
   squirrel:
@@ -120,6 +121,7 @@ const hash = function (str: string) {
 
 interface AvatarProps {
   content: string;
+  className?: string;
 }
 
 export const getAddressAnimal = (content: string) => {
@@ -131,11 +133,10 @@ export const getAddressAnimal = (content: string) => {
   return keys[idx];
 };
 
-function Avatar({ content }: AvatarProps) {
-  const [svgContent, setSvgContent] = useState('');
+function Avatar({ content, className }: AvatarProps) {
   const [animal, setAnimal] = useState('');
 
-  useEffect(() => {
+  const svgContent = useMemo(() => {
     const generateSvgContent = () => {
       let colors = defaultColors;
       const seed = hash(content);
@@ -163,19 +164,20 @@ function Avatar({ content }: AvatarProps) {
         shapesStr += `<circle r="${r}" cx="${cx}" cy="${cy}" fill="${fill}"/>`;
       }
       shapesStr += icons[animal];
-      let classNames = 'Avatar rounded-lg shadow-md';
+      let cls = classNames('Avatar rounded-lg shadow-md', className);
       const flip = Math.floor(rand.random() * 100) % 2;
-      if (flip === 1) classNames += ' transform scale-x-[-1]';
-      return `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" class="${classNames}" width="100" height="100" viewBox="0 0 100 100">${style}${bgStr}${shapesStr}</svg>`;
+      if (flip === 1) cls += ' transform scale-x-[-1]';
+      return `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="100%" class="${cls}" viewBox="0 0 100 100">${style}${bgStr}${shapesStr}</svg>`;
     };
 
-    setSvgContent(generateSvgContent());
-  }, [content]);
+    return generateSvgContent();
+  }, [content, className]);
 
   return (
     <div
+      key={`avatar-${content}`}
       className="Avatar"
-      title={`Your spirit animal: ${animal}`}
+      title={`${content} (${animal})`}
       dangerouslySetInnerHTML={{ __html: svgContent }}
     />
   );

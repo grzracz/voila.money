@@ -14,6 +14,7 @@ import Accounts from './views/Accounts';
 import Backup from './views/Accounts/Backup';
 import Create from './views/Accounts/Create';
 import Mnemonic from './views/Accounts/Mnemonic';
+import AccountHeader from './components/AccountHeader';
 
 const Routes: FC = () => {
   const { state } = useStore();
@@ -24,7 +25,12 @@ const Routes: FC = () => {
         className="min-w-[320px] flex flex-col"
         style={{ minHeight: 'clamp(568px, 100vh, 100vh)' }}
       >
+        <Toaster
+          position={state.display === 'tab' ? 'bottom-right' : 'top-center'}
+          reverseOrder
+        />
         <Navbar />
+        {state.addresses.length > 0 && <AccountHeader />}
         {state.signedIn ? (
           <div className="flex-grow flex">
             <Sidebar disabled={state.addresses.length === 0} />

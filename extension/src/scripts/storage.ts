@@ -165,14 +165,18 @@ export async function addAccount(data: {
 
 export async function removeAccount(data: {
   address: string;
-}): Promise<string[]> {
+}): Promise<[string | null, string[]]> {
   await remove(data.address);
   const accounts: string[] = (await get(StorageKeys.addresses)) || [];
-  await set(
-    StorageKeys.addresses,
-    accounts.filter((a) => a !== data.address)
-  );
-  return accounts;
+  const newAccounts = accounts.filter((a) => a !== data.address);
+  await set(StorageKeys.addresses, newAccounts);
+  if (newAccounts.length > 0) {
+    setPrimaryAddress({ address: newAccounts[0] });
+    return [newAccounts[0], newAccounts];
+  } else {
+    remove(StorageKeys.primaryAddress);
+    return [null, newAccounts];
+  }
 }
 
 export async function refresh(): Promise<void> {

@@ -8,6 +8,7 @@ import {
   removeAccount,
   getAddresses,
   getPrimaryAddress,
+  setPrimaryAddress,
   lock,
   refresh,
 } from './storage';
@@ -19,6 +20,7 @@ const SecureMessageListenerFunctionMap: Record<
   [SecureMessageTypes.isPasswordSet]: isPasswordSet,
   [SecureMessageTypes.verifyPassword]: verifyPassword,
   [SecureMessageTypes.setPassword]: setPassword,
+  [SecureMessageTypes.setPrimaryAddress]: setPrimaryAddress,
   [SecureMessageTypes.getPrimaryAddress]: getPrimaryAddress,
   [SecureMessageTypes.getAddresses]: getAddresses,
   [SecureMessageTypes.addAccount]: addAccount,
@@ -37,7 +39,9 @@ browser.runtime.onMessage.addListener(
     if (fn) {
       fn(message.data)
         .then((result: any) => sendResponse({ success: true, result }))
-        .catch((error: any) => sendResponse({ success: false, error }));
+        .catch((error: any) =>
+          sendResponse({ success: false, error: error?.message || error })
+        );
       return true;
     }
   }

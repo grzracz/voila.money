@@ -33,7 +33,6 @@ const Create: React.FC = () => {
           name: 'addresses',
           data: addresses,
         });
-        toast.success('Account saved!');
         navigate('/');
       } catch (e) {
         console.error(e);
