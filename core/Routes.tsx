@@ -7,7 +7,7 @@ import Sidebar from './components/Sidebar';
 import NFTs from './views/NFTs';
 import Explore from './views/Explore';
 import Activity from './views/Activity';
-import { useStore } from './store';
+import { useStore } from './utils/store';
 import Login from './views/Login';
 import { Toaster } from 'react-hot-toast';
 import Accounts from './views/Accounts';

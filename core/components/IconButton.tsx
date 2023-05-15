@@ -1,5 +1,6 @@
 import React from 'react';
 import { IconType } from 'react-icons';
+import { classNames } from '../utils/common';
 
 interface IconButtonProps {
   IconComponent: IconType;
@@ -7,6 +8,8 @@ interface IconButtonProps {
   disabled?: boolean;
   onClick?: () => void;
   children?: React.ReactNode;
+  primary?: boolean;
+  small?: boolean;
 }
 
 const IconButton: React.FC<IconButtonProps> = ({
@@ -15,15 +18,22 @@ const IconButton: React.FC<IconButtonProps> = ({
   disabled,
   onClick,
   children,
+  primary,
+  small,
 }) => {
   return (
     <button
       title={name}
       disabled={disabled}
       onClick={onClick}
-      className={
-        'flex p-3 space-x-2 items-center rounded-lg shadow-md text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100 bg-white dark:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60'
-      }
+      className={classNames(
+        'flex  items-center rounded-lg shadow-md active:opacity-50',
+        small ? 'p-1 space-x-1' : 'space-x-2 p-3',
+        disabled && 'disabled:cursor-not-allowed disabled:opacity-60',
+        primary
+          ? 'bg-blue-500 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700 text-white font-bold'
+          : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100 bg-white dark:bg-gray-800'
+      )}
     >
       <IconComponent size="1.2rem" />
       {children}

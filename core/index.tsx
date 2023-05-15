@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
 import './index.css';
-import { StoreProvider } from './store';
+import { StoreProvider } from './utils/store';
 import Routes from './Routes';
 import './i18n';
+import { SecureStorageProvider } from './utils/storage';
 
 interface AppProps {
   display: 'tab' | 'extension' | 'mobile';
@@ -11,7 +12,9 @@ interface AppProps {
 const App: FC<AppProps> = ({ display }) => {
   return (
     <StoreProvider display={display}>
-      <Routes />
+      <SecureStorageProvider>
+        <Routes />
+      </SecureStorageProvider>
     </StoreProvider>
   );
 };

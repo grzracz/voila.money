@@ -2,59 +2,53 @@ import React, { useEffect, useState } from 'react';
 import Lottie from 'react-lottie';
 import * as animationDark from '../../assets/logo-dark-animation.json';
 import * as animationLight from '../../assets/logo-light-animation.json';
-import { ActionTypes, useStore } from '../../store';
+import { ActionTypes, useStore } from '../../utils/store';
 import Input from '../../components/Input';
 import IconButton from '../../components/IconButton';
-import { IoEnter } from 'react-icons/io5';
-import { StorageKeys } from '../../../extension/src/scripts/storage';
-import { SecureStorage } from '../../utils/storage';
 import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { FaSignInAlt } from 'react-icons/fa';
+import { useSecureStorage } from '../../utils/storage';
 
 const Login: React.FC = () => {
   const { t } = useTranslation();
+  const storage = useSecureStorage();
   const { state, dispatch } = useStore();
   const [password, setPassword] = useState('');
+  const [loginDisabled, setLoginDisabled] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordSet, setPasswordSet] = useState<boolean>();
 
-  async function checkPasswordSet() {
-    setPasswordSet(await SecureStorage.isPasswordSet());
-  }
-
-  useEffect(() => {
-    checkPasswordSet();
-  }, []);
-
-  const login = async () => {
+  const login = async (checkPassword = true) => {
+    setLoginDisabled(true);
     try {
-      const valid = await SecureStorage.verifyPassword(password);
+      const valid = checkPassword
+        ? await storage.verifyPassword(password)
+        : true;
       if (valid) {
         if (!passwordSet) {
-          await SecureStorage.setPassword(password);
+          await storage.setPassword(password);
         }
+        dispatch(ActionTypes.UPDATE_DATA, {
+          name: 'primaryAddress',
+          data: (await storage.getPrimaryAddress()) || null,
+        });
+        dispatch(ActionTypes.UPDATE_DATA, {
+          name: 'addresses',
+          data: (await storage.getAddresses()) || [],
+        });
         dispatch(ActionTypes.UPDATE_DATA, {
           name: 'signedIn',
           data: true,
         });
-        dispatch(ActionTypes.UPDATE_DATA, {
-          name: 'primaryAddress',
-          data:
-            (await SecureStorage.get(StorageKeys.primaryAddress, password)) ||
-            null,
-        });
-        dispatch(ActionTypes.UPDATE_DATA, {
-          name: 'addresses',
-          data:
-            (await SecureStorage.get(StorageKeys.addresses, password)) || [],
-        });
       } else {
+        setLoginDisabled(false);
         toast.error(
           t('view.Login.PasswordMismatch', 'Password mismatch! Retry?')
         );
       }
     } catch (e) {
+      setLoginDisabled(false);
       toast.error(
         t(
           'view.Login.SomethingWentWrong',
@@ -63,6 +57,19 @@ const Login: React.FC = () => {
       );
     }
   };
+
+  useEffect(() => {
+    async function checkPasswordSet() {
+      const [isPasswordSet, isStorageAvailable] = await storage.isPasswordSet();
+      if (isStorageAvailable) {
+        login(false);
+      } else {
+        setPasswordSet(isPasswordSet);
+      }
+    }
+
+    checkPasswordSet();
+  }, []);
 
   return (
     <div className="flex flex-col justify-center items-center">
@@ -124,6 +131,7 @@ const Login: React.FC = () => {
               name={'Enter'}
               onClick={login}
               disabled={
+                loginDisabled ||
                 (!passwordSet && confirmPassword !== password) ||
                 !password ||
                 password.length < 8

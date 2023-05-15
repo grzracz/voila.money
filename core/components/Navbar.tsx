@@ -9,13 +9,15 @@ import {
   FaCog,
   FaExternalLinkAlt,
 } from 'react-icons/fa';
-import { ActionTypes, useStore } from '../store';
+import { ActionTypes, useStore } from '../utils/store';
 import { Link, NavLink } from 'react-router-dom';
 import IconButton from './IconButton';
 import { useTranslation } from 'react-i18next';
+import { useSecureStorage } from '../utils/storage';
 
 const Navbar: React.FC = () => {
   const { t } = useTranslation();
+  const storage = useSecureStorage();
   const { state, dispatch } = useStore();
   const isDark = state.theme === 'dark';
 
@@ -23,7 +25,8 @@ const Navbar: React.FC = () => {
     dispatch(ActionTypes.TOGGLE_THEME);
   };
 
-  const lock = () => {
+  const lock = async () => {
+    await storage.lock();
     dispatch(ActionTypes.LOCK);
   };
 

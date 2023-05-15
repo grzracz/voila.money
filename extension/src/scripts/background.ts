@@ -1,49 +1,44 @@
 import browser from 'webextension-polyfill';
+import { SecureMessageTypes } from '../../../core/utils/storage';
 import {
   setPassword,
   verifyPassword,
   isPasswordSet,
-  set,
-  get,
+  addAccount,
+  removeAccount,
+  getAddresses,
+  getPrimaryAddress,
+  lock,
+  refresh,
 } from './storage';
 
+const SecureMessageListenerFunctionMap: Record<
+  (typeof SecureMessageTypes)[keyof typeof SecureMessageTypes],
+  (data: any) => Promise<any>
+> = {
+  [SecureMessageTypes.isPasswordSet]: isPasswordSet,
+  [SecureMessageTypes.verifyPassword]: verifyPassword,
+  [SecureMessageTypes.setPassword]: setPassword,
+  [SecureMessageTypes.getPrimaryAddress]: getPrimaryAddress,
+  [SecureMessageTypes.getAddresses]: getAddresses,
+  [SecureMessageTypes.addAccount]: addAccount,
+  [SecureMessageTypes.removeAccount]: removeAccount,
+  [SecureMessageTypes.lock]: lock,
+  [SecureMessageTypes.refresh]: refresh,
+};
+
 browser.runtime.onMessage.addListener(
-  (message, sender, sendResponse: (data: any) => void) => {
-    if (message.type === 'setPassword') {
-      setPassword(message.password)
-        .then(() => sendResponse({ success: true }))
-        .catch((error) => sendResponse({ success: false, error }));
+  (
+    message: { type: keyof typeof SecureMessageTypes; data: any },
+    _,
+    sendResponse: (data: any) => void
+  ) => {
+    const fn = SecureMessageListenerFunctionMap[message.type];
+    if (fn) {
+      fn(message.data)
+        .then((result: any) => sendResponse({ success: true, result }))
+        .catch((error: any) => sendResponse({ success: false, error }));
       return true;
     }
-
-    if (message.type === 'verifyPassword') {
-      verifyPassword(message.password)
-        .then((result) => sendResponse({ success: true, result }))
-        .catch((error) => sendResponse({ success: false, error }));
-      return true;
-    }
-
-    if (message.type === 'isPasswordSet') {
-      isPasswordSet()
-        .then((result) => sendResponse({ success: true, result }))
-        .catch((error) => sendResponse({ success: false, error }));
-      return true;
-    }
-
-    if (message.type === 'set') {
-      set(message.name, message.value, message.password)
-        .then((result) => sendResponse({ success: true, result }))
-        .catch((error) => sendResponse({ success: false, error }));
-      return true;
-    }
-
-    if (message.type === 'get') {
-      get(message.name, message.password)
-        .then((result) => sendResponse({ success: true, result }))
-        .catch((error) => sendResponse({ success: false, error }));
-      return true;
-    }
-
-    return true;
   }
 );

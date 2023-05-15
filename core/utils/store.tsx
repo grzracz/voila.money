@@ -4,11 +4,12 @@ interface State {
   display: 'tab' | 'extension' | 'mobile';
   theme: 'dark' | 'light';
   signedIn: boolean;
+  lockWarning: boolean;
   primaryAddress?: string;
   addresses: string[];
 }
 
-interface Action {
+export interface Action {
   type: string;
   payload?: any;
 }
@@ -17,6 +18,7 @@ const initialState: State = {
   display: 'mobile',
   theme: 'light',
   signedIn: false,
+  lockWarning: false,
   addresses: [],
 };
 
