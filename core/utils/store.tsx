@@ -1,12 +1,14 @@
 import React, { createContext, useReducer, useContext } from 'react';
+import { NETWORKS, Network } from './network';
 
 interface State {
   display: 'tab' | 'extension' | 'mobile';
-  theme: 'dark' | 'light';
   signedIn: boolean;
   lockWarning: boolean;
   primaryAddress?: string;
   addresses: string[];
+  network: Network;
+  language: string;
 }
 
 export interface Action {
@@ -16,7 +18,8 @@ export interface Action {
 
 const initialState: State = {
   display: 'mobile',
-  theme: 'light',
+  network: NETWORKS.AlgorandMainnet,
+  language: 'en',
   signedIn: false,
   lockWarning: false,
   addresses: [],
@@ -30,11 +33,6 @@ export const ActionTypes = {
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case ActionTypes.TOGGLE_THEME:
-      const isDark = state.theme === 'dark';
-      document.body.classList.toggle('dark', !isDark);
-      localStorage.setItem('theme', isDark ? 'light' : 'dark');
-      return { ...state, theme: isDark ? 'light' : 'dark' };
     case ActionTypes.UPDATE_DATA:
       return { ...state, [action.payload?.name]: action.payload?.data };
     case ActionTypes.LOCK:
@@ -58,21 +56,12 @@ interface StoreProviderProps {
   display: 'tab' | 'extension' | 'mobile';
 }
 
-const getInitialTheme = () => {
-  if (typeof window !== 'undefined') {
-    const savedTheme = window.localStorage.getItem('theme');
-    return savedTheme === 'dark' ? 'dark' : 'light';
-  }
-  return 'light';
-};
-
 const initializeStore = (display: 'tab' | 'extension' | 'mobile'): State => {
-  const theme = getInitialTheme();
-
   return {
     ...initialState,
+    network:
+      NETWORKS[window.localStorage.getItem('network') || 'AlgorandMainnet'],
     display,
-    theme,
   };
 };
 

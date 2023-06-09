@@ -9,6 +9,7 @@ import React, {
   useState,
 } from 'react';
 import IconButton from '../components/IconButton';
+import { IS_DEVELOPMENT } from './common';
 
 export const SecureMessageTypes = {
   setPassword: 'setPassword',
@@ -19,6 +20,8 @@ export const SecureMessageTypes = {
   getAddresses: 'getAddresses',
   addAccount: 'addAccount',
   removeAccount: 'removeAccount',
+  createBackup: 'createBackup',
+  importBackup: 'importBackup',
   lock: 'lock',
   refresh: 'refresh',
 };
@@ -28,8 +31,10 @@ export const SecureMessageTypes = {
 // Use "refresh" to set timer to 0
 // Timer is set to 0 automatically after any get or set operation
 // "setPassword" and "isPasswordSet" do not trigger refresh as they do not use CryptoStorage
-export const STORAGE_TIMEOUT_WARNING_SECONDS = 4.5 * 60;
-export const STORAGE_TIMEOUT_SECONDS = 5 * 60;
+export const STORAGE_TIMEOUT_WARNING_SECONDS = IS_DEVELOPMENT
+  ? 59 * 60
+  : 4.5 * 60;
+export const STORAGE_TIMEOUT_SECONDS = IS_DEVELOPMENT ? 60 * 60 : 5 * 60;
 
 export class SecureStorage {
   private dispatch: (type: string, data?: any) => void;
@@ -53,7 +58,6 @@ export class SecureStorage {
 
   private async handleMessage(type: string, data?: object) {
     const response = await browser.runtime.sendMessage({ type, data });
-    console.log(response);
     if (response && response.success) {
       if (
         ![
@@ -110,7 +114,7 @@ export class SecureStorage {
 
   private async refreshStorageTimeout() {
     await this.handleMessage(SecureMessageTypes.refresh);
-    toast.remove(this.warningToast);
+    if (this.warningToast) toast.remove(this.warningToast);
     clearTimeout(this.warningTimeout);
     clearTimeout(this.storageTimeout);
     this.warningTimeout = this.setWarningTimeout();
@@ -156,6 +160,22 @@ export class SecureStorage {
   async removeAccount(address: string): Promise<[string | null, string[]]> {
     return await this.handleMessage(SecureMessageTypes.removeAccount, {
       address,
+    });
+  }
+
+  async createBackup(password: string): Promise<string> {
+    return await this.handleMessage(SecureMessageTypes.createBackup, {
+      password,
+    });
+  }
+
+  async importBackup(
+    backup: string,
+    backupPassword: string
+  ): Promise<[string | null, string[]]> {
+    return await this.handleMessage(SecureMessageTypes.importBackup, {
+      backup,
+      backupPassword,
     });
   }
 

@@ -97,26 +97,6 @@ body:not(.dark) h6 {
   color: var(--text-color-light);
 }
 
-@media (prefers-color-scheme: dark) {
-  body:not(.dark) {
-    color: var(--text-color-dark);
-    background-color: var(--background-color-dark);
-  }
-
-  body:not(.dark) h1,
-  body:not(.dark) h2,
-  body:not(.dark) h3,
-  body:not(.dark) h4,
-  body:not(.dark) h5,
-  body:not(.dark) h6 {
-    color: var(--text-color-dark);
-  }
-
-  body:not(.dark) a {
-    color: var(--link-color-dark);
-  }
-}
-
 body.dark {
   color: var(--text-color-dark);
   background-color: var(--background-color-dark);
@@ -134,4 +114,24 @@ body.dark h6 {
 * {
   transition: background-color 0.2s ease, border-color 0.2s ease,
     opacity 0.2s ease;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #0000;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #5dade2dc;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #5dade280;
 }

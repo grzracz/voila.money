@@ -9,10 +9,7 @@ interface InputProps {
   placeholder?: string;
   icon?: React.ReactNode;
   type?: string;
-  onClear?: () => void;
-  showClear?: boolean;
   disableMaxWidth?: boolean;
-  replaceClear?: React.ReactNode;
   noPadding?: boolean;
   onFocus?: string;
   disabled?: boolean;
@@ -26,10 +23,7 @@ const Input: FC<InputProps> = ({
   icon,
   type,
   onEnter,
-  onClear,
-  showClear,
   disableMaxWidth,
-  replaceClear,
   noPadding,
   onFocus,
   disabled,
@@ -58,18 +52,6 @@ const Input: FC<InputProps> = ({
         onFocus={onFocus as unknown as any}
         disabled={disabled}
       />
-      {replaceClear
-        ? replaceClear
-        : (showClear !== undefined ? showClear : value !== '') && (
-            <FaTimes
-              className="absolute right-2 sm:right-4 hover:opacity-80 transition-all cursor-pointer"
-              onClick={(event) => {
-                event.stopPropagation();
-                onChange('');
-                if (onClear) onClear();
-              }}
-            />
-          )}
     </div>
   );
 };

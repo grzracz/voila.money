@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Avatar from '../../../components/Avatar';
 import AccountName from '../../../components/AccountName';
 import IconButton from '../../../components/IconButton';
-import { FaRedo, FaSave, FaTimes } from 'react-icons/fa';
+import { FaChevronLeft, FaRedo, FaSave } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useSecureStorage } from '../../../utils/storage';
@@ -36,7 +36,9 @@ const Create: React.FC = () => {
         navigate('/');
       } catch (e) {
         console.error(e);
-        toast.error('Something went wrong while saving account');
+        toast.error(
+          'Something went wrong while saving account: ' + (e as Error)?.message
+        );
       }
     }
   };
@@ -52,7 +54,7 @@ const Create: React.FC = () => {
       </h1>
       <div className="flex w-full items-center justify-center flex-col space-y-8 py-16">
         <div className="flex space-x-2 items-center">
-          <Avatar content={account?.addr || ''} />
+          <Avatar content={account?.addr || ''} className="max-w-[160px]" />
           <IconButton
             IconComponent={FaRedo}
             name="Recreate"
@@ -66,10 +68,10 @@ const Create: React.FC = () => {
             Your private key will be securely stored in a backup file
           </span>
         </div>
-        <div className="p-4 flex space-x-2">
-          <Link to={'/'}>
-            <IconButton IconComponent={FaTimes} name="Cancel">
-              <span>Cancel</span>
+        <div className="p-4 flex space-x-4">
+          <Link to={'/accounts'}>
+            <IconButton IconComponent={FaChevronLeft} name="Cancel">
+              <span>Back</span>
             </IconButton>
           </Link>
           <IconButton

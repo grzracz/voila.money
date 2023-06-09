@@ -3,6 +3,7 @@ import browser from 'webextension-polyfill';
 import { CryptoStorage } from './webcrypto/storage';
 import algosdk from 'algosdk';
 import { STORAGE_TIMEOUT_SECONDS } from '../../../core/utils/storage';
+import { Buffer } from 'buffer';
 
 let storage: CryptoStorage | null = null;
 let storageExpiry: ReturnType<typeof setTimeout>;
@@ -47,7 +48,7 @@ async function set<T>(name: string, value: T): Promise<void> {
     const data = JSON.stringify(value);
     await storage.set(name, data);
   } else {
-    throw Error('Storage not available.');
+    throw new Error('Storage not available.');
   }
 }
 
@@ -56,7 +57,7 @@ async function remove(name: string): Promise<void> {
     updateStorageTimeout();
     await storage.delete(name);
   } else {
-    throw Error('Storage not available.');
+    throw new Error('Storage not available.');
   }
 }
 
@@ -69,7 +70,7 @@ async function get<T>(name: string): Promise<T | null> {
     }
     return null;
   } else {
-    throw Error('Storage not available.');
+    throw new Error('Storage not available.');
   }
 }
 
@@ -150,7 +151,7 @@ export async function addAccount(data: {
   mnemonic: string;
 }): Promise<[string, string[]]> {
   const account = algosdk.mnemonicToSecretKey(data.mnemonic);
-  await set(account.addr, data.mnemonic);
+  await set(account.addr, account.sk);
   const addresses: string[] = [
     ...((await get<string[]>(StorageKeys.addresses)) || []),
     account.addr,
@@ -167,15 +168,20 @@ export async function removeAccount(data: {
   address: string;
 }): Promise<[string | null, string[]]> {
   await remove(data.address);
-  const accounts: string[] = (await get(StorageKeys.addresses)) || [];
+  const accounts: string[] = await getAddresses();
+  const primaryAddress = await getPrimaryAddress();
   const newAccounts = accounts.filter((a) => a !== data.address);
   await set(StorageKeys.addresses, newAccounts);
-  if (newAccounts.length > 0) {
-    setPrimaryAddress({ address: newAccounts[0] });
-    return [newAccounts[0], newAccounts];
+  if (data.address === primaryAddress) {
+    if (newAccounts.length > 0) {
+      await setPrimaryAddress({ address: newAccounts[0] });
+      return [newAccounts[0], newAccounts];
+    } else {
+      await remove(StorageKeys.primaryAddress);
+      return [null, newAccounts];
+    }
   } else {
-    remove(StorageKeys.primaryAddress);
-    return [null, newAccounts];
+    return [primaryAddress, newAccounts];
   }
 }
 
@@ -186,4 +192,61 @@ export async function refresh(): Promise<void> {
 export async function lock(): Promise<void> {
   clearTimeout(storageExpiry);
   storage = null;
+}
+
+export async function createBackup(data: {
+  password: string;
+}): Promise<string> {
+  if (!(await verifyPassword(data))) {
+    throw new Error('Invalid password');
+  }
+  const addresses: string[] = await getAddresses();
+  const keys = [];
+  for (let address of addresses) {
+    keys.push(await get(address));
+  }
+  let backup = JSON.stringify(keys);
+  console.log(backup);
+  const cipher = CryptoJS.AES.encrypt(backup, data.password).toString();
+  return Buffer.from(JSON.stringify(cipher), 'utf8').toString('base64');
+}
+
+export async function importBackup(data: {
+  backup: string;
+  backupPassword: string;
+}): Promise<[string | null, string[]]> {
+  const backupCipherText = JSON.parse(
+    Buffer.from(data.backup, 'base64').toString('utf8')
+  );
+  try {
+    const backupPlainText = CryptoJS.AES.decrypt(
+      backupCipherText,
+      data.backupPassword
+    ).toString(CryptoJS.enc.Utf8);
+    const keys: Uint8Array[] = JSON.parse(backupPlainText);
+    const existingAddresses: string[] = await getAddresses();
+    for (const sk of keys) {
+      try {
+        const account = algosdk.mnemonicToSecretKey(
+          algosdk.secretKeyToMnemonic(Uint8Array.from(Object.values(sk)))
+        );
+        if (!existingAddresses.includes(account.addr)) {
+          await set(account.addr, account.sk);
+          existingAddresses.push(account.addr);
+        }
+      } catch (e) {
+        throw new Error('Malformed private key');
+      }
+    }
+    await set(StorageKeys.addresses, existingAddresses);
+    const primaryAddress = await getPrimaryAddress();
+    if (!primaryAddress && existingAddresses.length > 0) {
+      await setPrimaryAddress({ address: existingAddresses[0] });
+      return [existingAddresses[0], existingAddresses];
+    } else {
+      return [primaryAddress, existingAddresses];
+    }
+  } catch (e) {
+    throw new Error((e as Error)?.message?.toString() || 'Invalid password');
+  }
 }

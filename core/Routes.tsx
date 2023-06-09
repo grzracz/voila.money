@@ -2,19 +2,20 @@ import React, { FC } from 'react';
 import Navbar from './components/Navbar';
 import { HashRouter, Routes as BrowserRoutes, Route } from 'react-router-dom';
 import Home from './views/Home';
-import Settings from './views/Settings';
 import Sidebar from './components/Sidebar';
 import NFTs from './views/NFTs';
 import Explore from './views/Explore';
 import Activity from './views/Activity';
 import { useStore } from './utils/store';
 import Login from './views/Login';
-import { Toaster } from 'react-hot-toast';
 import Accounts from './views/Accounts';
 import Backup from './views/Accounts/Backup';
 import Create from './views/Accounts/Create';
 import Mnemonic from './views/Accounts/Mnemonic';
 import AccountHeader from './components/AccountHeader';
+import Restore from './views/Accounts/Restore';
+import Remove from './views/Accounts/Remove';
+import Settings from './views/Settings';
 
 const Routes: FC = () => {
   const { state } = useStore();
@@ -22,17 +23,20 @@ const Routes: FC = () => {
   return (
     <HashRouter>
       <div
-        className="min-w-[320px] flex flex-col"
-        style={{ minHeight: 'clamp(568px, 100vh, 100vh)' }}
+        className="flex flex-col overflow-hidden relative pb-[64px] md:pb-0"
+        style={{
+          minHeight: state.display === 'extension' ? '600px' : '100vh',
+          height: state.display === 'extension' ? '600px' : '100vh',
+          maxHeight: state.display === 'extension' ? '600px' : '100vh',
+          minWidth: state.display === 'extension' ? '360px' : '100vw',
+          width: state.display === 'extension' ? '360px' : '100vw',
+          maxWidth: state.display === 'extension' ? '360px' : '100vw',
+        }}
       >
-        <Toaster
-          position={state.display === 'tab' ? 'bottom-right' : 'top-center'}
-          reverseOrder
-        />
         <Navbar />
         {state.addresses.length > 0 && <AccountHeader />}
         {state.signedIn ? (
-          <div className="flex-grow flex">
+          <div className="flex-grow h-full overflow-x-hidden overflow-y-auto flex text-sm">
             <Sidebar disabled={state.addresses.length === 0} />
             <div className="p-2 md:p-4 w-full flex justify-center">
               <div className="w-full max-w-screen-2xl">
@@ -43,15 +47,17 @@ const Routes: FC = () => {
                       state.addresses.length > 0 ? <Home /> : <Accounts />
                     }
                   />
-                  <Route path="settings" element={<Settings />} />
                   <Route path="nfts" element={<NFTs />} />
                   <Route path="explore" element={<Explore />} />
                   <Route path="activity" element={<Activity />} />
+                  <Route path="settings" element={<Settings />} />
                   <Route path="accounts">
                     <Route index element={<Accounts />} />
                     <Route path="create" element={<Create />} />
                     <Route path="mnemonic" element={<Mnemonic />} />
                     <Route path="backup" element={<Backup />} />
+                    <Route path="restore" element={<Restore />} />
+                    <Route path="remove" element={<Remove />} />
                   </Route>
                 </BrowserRoutes>
               </div>

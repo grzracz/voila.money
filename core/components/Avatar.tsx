@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import MersenneTwister from 'mersenne-twister';
 import { classNames } from '../utils/common';
 
@@ -177,7 +177,7 @@ function Avatar({ content, className }: AvatarProps) {
     <div
       key={`avatar-${content}`}
       className="Avatar"
-      title={`${content} (${animal})`}
+      title={animal}
       dangerouslySetInnerHTML={{ __html: svgContent }}
     />
   );

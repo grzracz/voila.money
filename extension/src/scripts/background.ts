@@ -7,6 +7,8 @@ import {
   addAccount,
   removeAccount,
   getAddresses,
+  createBackup,
+  importBackup,
   getPrimaryAddress,
   setPrimaryAddress,
   lock,
@@ -25,6 +27,8 @@ const SecureMessageListenerFunctionMap: Record<
   [SecureMessageTypes.getAddresses]: getAddresses,
   [SecureMessageTypes.addAccount]: addAccount,
   [SecureMessageTypes.removeAccount]: removeAccount,
+  [SecureMessageTypes.createBackup]: createBackup,
+  [SecureMessageTypes.importBackup]: importBackup,
   [SecureMessageTypes.lock]: lock,
   [SecureMessageTypes.refresh]: refresh,
 };

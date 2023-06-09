@@ -6,24 +6,23 @@ import {
   FaSun,
   FaMoon,
   FaLock,
-  FaCog,
   FaExternalLinkAlt,
+  FaCog,
 } from 'react-icons/fa';
 import { ActionTypes, useStore } from '../utils/store';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import IconButton from './IconButton';
 import { useTranslation } from 'react-i18next';
 import { useSecureStorage } from '../utils/storage';
+import NetworkSettings from './NetworkSettings';
+import { useDarkMode } from '../hooks/useDarkMode';
 
 const Navbar: React.FC = () => {
   const { t } = useTranslation();
   const storage = useSecureStorage();
+  const location = useLocation();
   const { state, dispatch } = useStore();
-  const isDark = state.theme === 'dark';
-
-  const toggleTheme = () => {
-    dispatch(ActionTypes.TOGGLE_THEME);
-  };
+  const { isDark, toggleDarkMode } = useDarkMode();
 
   const lock = async () => {
     try {
@@ -52,38 +51,22 @@ const Navbar: React.FC = () => {
               <Switch
                 id={'toggle-theme'}
                 name={'toggle-theme'}
-                checked={isDark}
-                onChange={toggleTheme}
+                checked={!!isDark}
+                onChange={toggleDarkMode}
                 iconOff={<FaSun size="0.8rem" />}
                 iconOn={<FaMoon size="0.8rem" />}
               />
               {state.signedIn && (
                 <>
-                  <NavLink
-                    title={
-                      t('components.Navbar.Settings', 'Settings') as string
-                    }
-                    to={'/settings'}
-                    className={({ isActive, isPending }) => {
-                      const baseClasses =
-                        'flex md:flex-col md:space-y-2 items-center p-3 space-x-3 md:space-x-0 md:w-full md:justify-center rounded-lg shadow-md';
-                      const activeClasses =
-                        'bg-blue-500 dark:bg-blue-600 text-white';
-                      const inactiveClasses =
-                        'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100 bg-white dark:bg-gray-800';
-                      const pendingClasses = 'pending';
-
-                      if (isPending) {
-                        return `${baseClasses} ${pendingClasses}`;
-                      }
-
-                      return isActive
-                        ? `${baseClasses} ${activeClasses}`
-                        : `${baseClasses} ${inactiveClasses}`;
-                    }}
-                  >
-                    <FaCog size="1.2rem" />
-                  </NavLink>
+                  <NetworkSettings />
+                  <Link to="/settings">
+                    <IconButton
+                      IconComponent={FaCog}
+                      name={'Settings'}
+                      disabled
+                      primary={location.pathname === '/settings'}
+                    />
+                  </Link>
                   <IconButton
                     onClick={lock}
                     IconComponent={FaLock}
