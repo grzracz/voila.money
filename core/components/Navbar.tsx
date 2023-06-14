@@ -15,7 +15,7 @@ import IconButton from './IconButton';
 import { useTranslation } from 'react-i18next';
 import { useSecureStorage } from '../utils/storage';
 import NetworkSettings from './NetworkSettings';
-import { useDarkMode } from '../hooks/useDarkMode';
+import { useDarkMode } from '../utils/darkMode';
 
 const Navbar: React.FC = () => {
   const { t } = useTranslation();
@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="top-0 left-0 right-0 z-10 relative transition-all p-2 md:p-4">
+    <nav className="top-0 left-0 right-0 relative transition-all p-2 md:p-4">
       <div className="container mx-auto px-2 md:px-4 flex items-center justify-between space-x-4">
         <div className="flex items-center min-w-max py-1 md:py-2">
           <Link to="/">
@@ -45,7 +45,7 @@ const Navbar: React.FC = () => {
             />
           </Link>
         </div>
-        <div className="flex space-x-2 md:space-x-4 items-center">
+        <div className="flex space-x-2 md:space-x-4 items-center min-h-[48px]">
           {state.display !== 'extension' ? (
             <>
               <Switch
@@ -76,9 +76,12 @@ const Navbar: React.FC = () => {
               )}
             </>
           ) : (
-            <a href="/wallet.html" target="_blank" className="text-blue-400">
-              <FaExternalLinkAlt size="1.2rem" />
-            </a>
+            <>
+              {state.signedIn && <NetworkSettings />}
+              <a href="/wallet.html" target="_blank" className="text-blue-400">
+                <FaExternalLinkAlt size="1.2rem" />
+              </a>
+            </>
           )}
         </div>
       </div>

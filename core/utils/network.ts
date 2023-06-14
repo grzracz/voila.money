@@ -3,6 +3,8 @@ import algorandTokenSvg from '../assets/networks/algorand-token.svg';
 import algorandTokenPng from '../assets/networks/algorand-token.png';
 import voiTokenSvg from '../assets/networks/voi-token.svg';
 import voiTokenPng from '../assets/networks/voi-token.png';
+import { getLocalState } from '../hooks/useLocalState';
+import algosdk from 'algosdk';
 
 export type NetworkToken = {
   name: string;
@@ -13,25 +15,27 @@ export type NetworkToken = {
 };
 
 export type Node = {
-  token?: string;
+  token: string;
   server: string;
-  port?: number;
+  port: number;
   description?: string;
 };
 
 export type Network = {
+  id: string;
   name: string;
   description: string;
   genesisId: string;
   isMainnet: boolean;
   token: NetworkToken;
-  nodes: Node[];
-  indexers: Node[];
+  node: Node;
+  indexer: Node;
   faucet?: string;
 };
 
 export const NETWORKS: Record<string, Network> = {
   AlgorandMainnet: {
+    id: 'AlgorandMainnet',
     name: 'Algorand',
     description: 'Algorand Mainnet Network',
     genesisId: 'mainnet-v1.0',
@@ -43,22 +47,21 @@ export const NETWORKS: Record<string, Network> = {
       svg: algorandTokenSvg,
       png: algorandTokenPng,
     },
-    nodes: [
-      {
-        server: 'https://mainnet-api.algonode.cloud',
-        port: 443,
-        description: 'Free global API provided by AlgoNode.io',
-      },
-    ],
-    indexers: [
-      {
-        server: 'https://mainnet-idx.algonode.cloud',
-        port: 443,
-        description: 'Free global API provided by AlgoNode.io',
-      },
-    ],
+    node: {
+      token: '',
+      server: 'https://mainnet-api.algonode.cloud',
+      port: 443,
+      description: 'Free global API provided by AlgoNode.io',
+    },
+    indexer: {
+      token: '',
+      server: 'https://mainnet-idx.algonode.cloud',
+      port: 443,
+      description: 'Free global API provided by AlgoNode.io',
+    },
   },
   AlgorandTestnet: {
+    id: 'AlgorandTestnet',
     name: 'Algorand',
     description: 'Algorand Testnet Network',
     genesisId: 'testnet-v1.0',
@@ -70,23 +73,22 @@ export const NETWORKS: Record<string, Network> = {
       svg: algorandTokenSvg,
       png: algorandTokenPng,
     },
-    nodes: [
-      {
-        server: 'https://testnet-api.algonode.cloud',
-        port: 443,
-        description: 'Free global API provided by AlgoNode.io',
-      },
-    ],
-    indexers: [
-      {
-        server: 'https://testnet-idx.algonode.cloud',
-        port: 443,
-        description: 'Free global API provided by AlgoNode.io',
-      },
-    ],
+    node: {
+      token: '',
+      server: 'https://testnet-api.algonode.cloud',
+      port: 443,
+      description: 'Free global API provided by AlgoNode.io',
+    },
+    indexer: {
+      token: '',
+      server: 'https://testnet-idx.algonode.cloud',
+      port: 443,
+      description: 'Free global API provided by AlgoNode.io',
+    },
     faucet: 'https://bank.testnet.algorand.network/',
   },
   VoiTestnet: {
+    id: 'VoiTestnet',
     name: 'Voi',
     description: 'Voi Testnet Network',
     genesisId: 'voi-test-v1',
@@ -98,19 +100,44 @@ export const NETWORKS: Record<string, Network> = {
       svg: voiTokenSvg,
       png: voiTokenPng,
     },
-    nodes: [
-      {
-        server: 'https://voitest-api.algorpc.pro',
-        port: 443,
-        description: 'Free global API provided by AlgoNode.io',
-      },
-    ],
-    indexers: [
-      {
-        server: 'https://voitest-idx.algorpc.pro',
-        port: 443,
-        description: 'Free Indexer API provided by AlgoNode.io',
-      },
-    ],
+    node: {
+      token: '',
+      server: 'https://voitest-api.algorpc.pro',
+      port: 443,
+      description: 'Free global API provided by AlgoNode.io',
+    },
+    indexer: {
+      token: '',
+      server: 'https://voitest-idx.algorpc.pro',
+      port: 443,
+      description: 'Free Indexer API provided by AlgoNode.io',
+    },
   },
+};
+
+export const getNetwork = (id: string): Network => {
+  return getLocalState<Network>(
+    `network-${id}`,
+    NETWORKS[id] || NETWORKS.AlgorandMainnet
+  );
+};
+
+export const getNodeClient = (network: Network) => {
+  return new algosdk.Algodv2(
+    network.node.token,
+    network.node.server,
+    network.node.port
+  );
+};
+
+export const getIndexerClient = (network: Network) => {
+  return new algosdk.Indexer(
+    network.node.token,
+    network.node.server,
+    network.node.port
+  );
+};
+
+export const formatTokenAmount = (network: Network, amount: number) => {
+  return amount / Math.pow(10, network.token.decimals);
 };

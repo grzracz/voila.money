@@ -1,38 +1,32 @@
-import React, { useState } from 'react';
-import { FaExclamationTriangle } from 'react-icons/fa';
+import React from 'react';
 import IconButton from './IconButton';
 
 import { NETWORKS, Network } from '../utils/network';
 import Dropdown from './Dropdown';
 import { classNames } from '../utils/common';
+import { ActionTypes, useStore } from '../utils/store';
 
 const NetworkSettings: React.FC = () => {
-  const [network, setNetwork] = useState(NETWORKS.AlgorandMainnet);
+  const { state, dispatch } = useStore();
+  const network = state.network;
 
-  const NetworkIcon =
-    (network: Network, showTestnet = true) =>
-    () =>
-      (
-        <div className="flex items-center min-w-max space-x-2">
-          <img
-            src={network.token.svg as unknown as string}
-            alt=""
-            className="shadow-lg rounded-full"
-            style={{ height: '1.2rem', width: '1.2rem' }}
-          />
-          {!network.isMainnet && showTestnet && (
-            <FaExclamationTriangle
-              size="1rem"
-              style={{ height: '1rem', width: '1rem' }}
-              className="inline"
-              color="orange"
-            />
+  const NetworkIcon = (nw: Network) => () =>
+    (
+      <div className="flex items-center min-w-max space-x-2">
+        <img
+          src={nw.token.svg as unknown as string}
+          alt=""
+          className={classNames(
+            'shadow-lg rounded-full text-white',
+            !nw.isMainnet && 'bg-orange-500 dark:bg-orange-600 p-1'
           )}
-        </div>
-      );
+          style={{ height: '1.2rem', width: '1.2rem' }}
+        />
+      </div>
+    );
 
   const updateNetwork = (id: string) => {
-    setNetwork(NETWORKS[id]);
+    dispatch(ActionTypes.UPDATE_NETWORK, { id });
   };
 
   return (
@@ -43,7 +37,7 @@ const NetworkSettings: React.FC = () => {
         content: (
           <div className="flex space-x-2 items-center justify-between text-center dark:bg-white bg-black bg-opacity-5 dark:bg-opacity-5 rounded-lg p-2">
             <div className="flex space-x-2 items-center">
-              {NetworkIcon(NETWORKS[network], false)()}
+              {NetworkIcon(NETWORKS[network])()}
               <span className="font-bold">{NETWORKS[network].name}</span>
             </div>
             <div>

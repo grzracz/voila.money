@@ -1,14 +1,21 @@
 import React, { createContext, useReducer, useContext } from 'react';
-import { NETWORKS, Network } from './network';
+import {
+  NETWORKS,
+  Network,
+  getIndexerClient,
+  getNetwork,
+  getNodeClient,
+} from './network';
+import algosdk from 'algosdk';
 
 interface State {
   display: 'tab' | 'extension' | 'mobile';
   signedIn: boolean;
-  lockWarning: boolean;
   primaryAddress?: string;
   addresses: string[];
   network: Network;
-  language: string;
+  node: algosdk.Algodv2;
+  indexer: algosdk.Indexer;
 }
 
 export interface Action {
@@ -19,20 +26,37 @@ export interface Action {
 const initialState: State = {
   display: 'mobile',
   network: NETWORKS.AlgorandMainnet,
-  language: 'en',
   signedIn: false,
-  lockWarning: false,
   addresses: [],
+  node: getNodeClient(NETWORKS.AlgorandMainnet),
+  indexer: getIndexerClient(NETWORKS.AlgorandMainnet),
 };
 
 export const ActionTypes = {
   TOGGLE_THEME: 'TOGGLE_THEME',
   UPDATE_DATA: 'UPDATE_DATA',
+  UPDATE_NETWORK: 'UPDATE_NETWORK',
   LOCK: 'LOCK',
 };
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
+    case ActionTypes.UPDATE_NETWORK:
+      const networkId = action.payload?.id;
+      localStorage.setItem('network', networkId);
+      let network;
+      if (action.payload?.data) {
+        network = action.payload?.data;
+        localStorage.setItem(`network-${networkId}`, action.payload?.data);
+      } else {
+        network = getNetwork(networkId);
+      }
+      return {
+        ...state,
+        network,
+        node: getNodeClient(network),
+        indexer: getIndexerClient(network),
+      };
     case ActionTypes.UPDATE_DATA:
       return { ...state, [action.payload?.name]: action.payload?.data };
     case ActionTypes.LOCK:
@@ -57,11 +81,17 @@ interface StoreProviderProps {
 }
 
 const initializeStore = (display: 'tab' | 'extension' | 'mobile'): State => {
+  const network = getNetwork(
+    window.localStorage.getItem('network') || 'AlgorandMainnet'
+  );
+  const node = getNodeClient(network);
+  const indexer = getIndexerClient(network);
   return {
     ...initialState,
-    network:
-      NETWORKS[window.localStorage.getItem('network') || 'AlgorandMainnet'],
     display,
+    network,
+    node,
+    indexer,
   };
 };
 

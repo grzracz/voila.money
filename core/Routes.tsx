@@ -16,6 +16,8 @@ import AccountHeader from './components/AccountHeader';
 import Restore from './views/Accounts/Restore';
 import Remove from './views/Accounts/Remove';
 import Settings from './views/Settings';
+import Send from './views/Send';
+import Opt from './views/Opt';
 
 const Routes: FC = () => {
   const { state } = useStore();
@@ -47,6 +49,9 @@ const Routes: FC = () => {
                       state.addresses.length > 0 ? <Home /> : <Accounts />
                     }
                   />
+                  <Route path="send" element={<Send />} />
+                  <Route path="send/:id" element={<Send />} />
+                  <Route path="opt" element={<Opt />} />
                   <Route path="nfts" element={<NFTs />} />
                   <Route path="explore" element={<Explore />} />
                   <Route path="activity" element={<Activity />} />

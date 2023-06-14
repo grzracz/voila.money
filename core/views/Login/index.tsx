@@ -9,7 +9,7 @@ import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { FaLock, FaSignInAlt } from 'react-icons/fa';
 import { useSecureStorage } from '../../utils/storage';
-import { useDarkMode } from '../../hooks/useDarkMode';
+import { useDarkMode } from '../../utils/darkMode';
 
 const Login: React.FC = () => {
   const { t } = useTranslation();
