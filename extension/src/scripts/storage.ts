@@ -36,7 +36,9 @@ async function getLocalStorage<T>(name: string): Promise<T | null> {
 
 async function updateStorageTimeout() {
   if (storageExpiry) clearTimeout(storageExpiry);
+  console.log('updating storage timeout', storageExpiry);
   storageExpiry = setTimeout(() => {
+    console.log('locking storage.');
     storage = null;
     // delay clear so the app has a chance to call it without error
   }, 1000 * (STORAGE_TIMEOUT_SECONDS + 1));
@@ -127,6 +129,7 @@ export async function verifyPassword(data: {
   );
   if (computedHash.toString() === storedHash) {
     updateStorageTimeout();
+    console.log('creating storage');
     storage = new CryptoStorage(data.password);
     return true;
   }
@@ -249,4 +252,17 @@ export async function importBackup(data: {
   } catch (e) {
     throw new Error((e as Error)?.message?.toString() || 'Invalid password');
   }
+}
+
+export async function signTransactions(data: {
+  groups: algosdk.TransactionLike[][];
+  address: string;
+}): Promise<{ txID: string; blob: Uint8Array }[][]> {
+  const sk = await get<Uint8Array>(data.address);
+  if (!sk) {
+    throw new Error('Account not found.');
+  }
+  return data.groups.map((group) => {
+    return group.map((txn) => algosdk.signTransaction(txn, sk));
+  });
 }

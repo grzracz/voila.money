@@ -20,6 +20,31 @@ const Login: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordSet, setPasswordSet] = useState<boolean>();
   const { isDark } = useDarkMode();
+  const [isCapsLockOn, setIsCapsLockOn] = useState(false);
+
+  useEffect(() => {
+    const handleKeyPress = (event: any) => {
+      const char = event.key;
+
+      if (!/^[a-zA-Z]$/.test(char)) {
+        return;
+      }
+
+      const isLetter = char.toUpperCase() !== char.toLowerCase();
+      const isCapsLock =
+        isLetter &&
+        ((event.shiftKey && char === char.toLowerCase()) ||
+          (!event.shiftKey && char === char.toUpperCase()));
+
+      setIsCapsLockOn(isCapsLock);
+    };
+
+    window.addEventListener('keypress', handleKeyPress);
+
+    return () => {
+      window.removeEventListener('keypress', handleKeyPress);
+    };
+  }, []);
 
   const login = async (checkPassword = true) => {
     setLoginDisabled(true);
@@ -125,6 +150,11 @@ const Login: React.FC = () => {
                 onEnter={login}
               />
             </div>
+          )}
+          {isCapsLockOn && (
+            <span className="text-red-400 font-bold pt-2">
+              Caps Lock is on!
+            </span>
           )}
           <div className="max-w-min pt-8">
             <IconButton

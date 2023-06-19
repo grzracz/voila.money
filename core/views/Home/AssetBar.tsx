@@ -6,8 +6,9 @@ import { FaPaperPlane, FaTrash } from 'react-icons/fa';
 import assetPlaceholder from '../../assets/asset.png';
 import Card from '../../components/Card';
 import { classNames } from '../../utils/common';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Network } from '../../utils/network';
+import { useStore } from '../../utils/store';
 
 interface AssetBarProps {
   id: number;
@@ -17,6 +18,9 @@ interface AssetBarProps {
 }
 
 const AssetBar: React.FC<AssetBarProps> = ({ id, amount, assets, network }) => {
+  const { state } = useStore();
+  const navigate = useNavigate();
+
   const [name, ticker, decimals] = useMemo(() => {
     if (network)
       return [network.token.name, network.token.ticker, network.token.decimals];
@@ -40,6 +44,9 @@ const AssetBar: React.FC<AssetBarProps> = ({ id, amount, assets, network }) => {
 
   return (
     <Card
+      onClick={
+        state.display === 'extension' ? () => navigate(`send/${id}`) : undefined
+      }
       className={classNames(
         'w-full items-center flex justify-between',
         !network && amount === 0 && 'opacity-50 hover:opacity-100'
@@ -87,7 +94,12 @@ const AssetBar: React.FC<AssetBarProps> = ({ id, amount, assets, network }) => {
           <Amount amount={amount} decimals={decimals} size={1.25} />
           {ticker && <span className="font-mono opacity-80">{ticker}</span>}
         </div>
-        <div className="px-4 flex space-x-2 items-center">
+        <div
+          className={classNames(
+            'px-4 flex space-x-2 items-center',
+            state.display === 'extension' && 'hidden'
+          )}
+        >
           {amount > 0 && (
             <Link to={`/send/${id}`}>
               <IconButton IconComponent={FaPaperPlane} small name="Send" />

@@ -22,6 +22,7 @@ export const SecureMessageTypes = {
   removeAccount: 'removeAccount',
   createBackup: 'createBackup',
   importBackup: 'importBackup',
+  signTransactions: 'signTransactions',
   lock: 'lock',
   refresh: 'refresh',
 };

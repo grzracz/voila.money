@@ -31,7 +31,7 @@ const AccountHeader: React.FC = () => {
 
   return (
     <div className="flex w-full justify-center">
-      <div className="relative max-w-screen-2xl flex flex-col w-full justify-center items-end">
+      <div className="relative max-w-screen-2xl flex flex-col w-full justify-center items-center sm:items-end">
         <div className="sm:absolute flex flex-col top-0 items-center justify-center">
           <div className="flex items-center space-x-4 h-[80px]">
             <IconButton

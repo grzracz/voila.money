@@ -13,6 +13,7 @@ import {
   setPrimaryAddress,
   lock,
   refresh,
+  signTransactions,
 } from './storage';
 
 const SecureMessageListenerFunctionMap: Record<
@@ -29,6 +30,7 @@ const SecureMessageListenerFunctionMap: Record<
   [SecureMessageTypes.removeAccount]: removeAccount,
   [SecureMessageTypes.createBackup]: createBackup,
   [SecureMessageTypes.importBackup]: importBackup,
+  [SecureMessageTypes.signTransactions]: signTransactions,
   [SecureMessageTypes.lock]: lock,
   [SecureMessageTypes.refresh]: refresh,
 };
@@ -36,9 +38,14 @@ const SecureMessageListenerFunctionMap: Record<
 browser.runtime.onMessage.addListener(
   (
     message: { type: keyof typeof SecureMessageTypes; data: any },
-    _,
+    sender,
     sendResponse: (data: any) => void
   ) => {
+    if (sender.id !== browser.runtime.id) {
+      console.error('Received a message from an untrusted source.', sender);
+      return;
+    }
+
     const fn = SecureMessageListenerFunctionMap[message.type];
     if (fn) {
       fn(message.data)
