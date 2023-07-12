@@ -49,13 +49,13 @@ const Login: React.FC = () => {
   const login = async (checkPassword = true) => {
     setLoginDisabled(true);
     try {
+      if (checkPassword && passwordSet === false) {
+        await storage.setPassword(password);
+      }
       const valid = checkPassword
         ? await storage.verifyPassword(password)
         : true;
       if (valid) {
-        if (!passwordSet) {
-          await storage.setPassword(password);
-        }
         dispatch(ActionTypes.UPDATE_DATA, {
           name: 'primaryAddress',
           data: (await storage.getPrimaryAddress()) || null,

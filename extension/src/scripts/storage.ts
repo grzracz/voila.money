@@ -105,7 +105,7 @@ function getPasswordHash(password: string): PasswordHash {
 
 export async function setPassword(data: { password: string }): Promise<void> {
   const passwordSet = await isPasswordSet();
-  if (!passwordSet) {
+  if (!passwordSet[0]) {
     const passwordHash = getPasswordHash(data.password);
     await setLocalStorage(StorageKeys.passwordHash, passwordHash);
   }
