@@ -50,7 +50,7 @@ async function set<T>(name: string, value: T): Promise<void> {
     const data = JSON.stringify(value);
     await storage.set(name, data);
   } else {
-    throw new Error('Storage not available1.');
+    throw new Error('Storage not available.');
   }
 }
 
@@ -59,7 +59,7 @@ async function remove(name: string): Promise<void> {
     updateStorageTimeout();
     await storage.delete(name);
   } else {
-    throw new Error('Storage not available2.');
+    throw new Error('Storage not available.');
   }
 }
 
@@ -72,7 +72,7 @@ async function get<T>(name: string): Promise<T | null> {
     }
     return null;
   } else {
-    throw new Error('Storage not available3.');
+    throw new Error('Storage not available.');
   }
 }
 
