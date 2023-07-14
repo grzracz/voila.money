@@ -119,9 +119,9 @@ const Mnemonic: React.FC = () => {
         <div className="flex flex-col justify-center items-center space-y-3">
           <div className="grid grid-cols-5 gap-x-4">
             {new Array(5).fill(0).map((_, i) => (
-              <div className="flex flex-col space-y-2">
+              <div className="flex flex-col space-y-2" key={5 * i + 1}>
                 {new Array(5).fill(0).map((_, j) => (
-                  <div className="flex space-x-2 items-center">
+                  <div className="flex space-x-2 items-center" key={5 * i + j + 1}>
                     <span
                       className={classNames(
                         'text-xs font-bold  w-[24px] text-right',
