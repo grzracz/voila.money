@@ -10,12 +10,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Network } from '../../utils/network';
 import { useStore } from '../../utils/store';
 import { decodeAddress } from 'algosdk'
-import { sha256 } from 'js-sha256'
 import { CID } from 'multiformats/cid'
 import * as mfsha2 from 'multiformats/hashes/sha2'
 import * as digest from 'multiformats/hashes/digest'
 import { CIDVersion } from 'multiformats/types/src/cid'
-
 
 export const ARC3_NAME_SUFFIX = "@arc3"
 export const ARC3_URL_SUFFIX = "#arc3"

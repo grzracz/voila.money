@@ -16,6 +16,109 @@ export interface AccountAssetInformation {
   'is-frozen': boolean;
 }
 
+export interface AccountTransactionInformation {
+  'application-config-index': number;
+  'application-transaction': {
+     accounts: [];
+    'application-args': [];
+    'application-id': number;
+    'application-revision': number;
+    'foreign-assets': [];
+    'global-state-schema': {
+      'num-byte-slice': number;
+      'num-uint': number;
+    };
+    'local-state-schema': {
+      'num-byte-slice': number;
+      'num-uint': number;
+    };
+    'on-completion': string;
+  }[];
+  'asset-transfer-transaction': {
+    'amount': number;
+    'asset-decimals': number;
+    'asset-id': number;
+    'asset-name': string;
+    'asset-unit-name': string;
+    'close-acc-rewards': number;
+    'close-amount': number;
+    'close-asset-balance': number;
+    'close-balance': number;
+    'opt-in': boolean;
+    'receiver': string;
+    'receiver-acc-rewards': number;
+    'receiver-asset-balance': number;
+    'receiver-balance': number;
+    'receiver-tx-counter': number;
+    'sender-asset-balance': number;
+  }[];
+  'application-tx-counter': number;
+  'block-rewards-level': number;
+  'close-rewards': number;
+  'closing-amount': number;
+  'confirmed-round': number;
+  'fee': number;
+  'first-valid': number;
+  'id': string;
+  'index': number;
+  'inner-tx-offset': number;
+  'inner-txns': {
+    'asset-transfer-transaction': {
+      'amount': number;
+      'asset-decimals': number;
+      'asset-id': number;
+      'asset-name': string;
+      'asset-unit-name': string;
+      'close-acc-rewards': number;
+      'close-amount': number;
+      'close-asset-balance': number;
+      'close-balance': number;
+      'opt-in': boolean;
+      'receiver': string;
+      'receiver-acc-rewards': number;
+      'receiver-asset-balance': number;
+      'receiver-balance': number;
+      'receiver-tx-counter': number;
+      'sender-asset-balance': number;
+    }[];
+    'asset-tx-counter': number;
+    'block-rewards-level': number;
+    'close-rewards': number;
+    'closing-amount': number;
+    'confirmed-round': number;
+    'fee': number;
+    'first-valid': number;
+    'index': number;
+    'inner-tx-offset': number;
+    'intra-round-offset': number;
+    'last-valid': number;
+    'logs': [];
+    'parent-tx-offset': number;
+    'receiver-rewards': number;
+    'round-time': number;
+    'sender': string;
+    'sender-acc-rewards': number;
+    'sender-balance': number;
+    'sender-rewards': number;
+    'sender-tx-counter': number;
+    'tx-type': string;
+  }[];
+  'intra-round-offset': number;
+  'last-valid': number;
+  'logs': [];
+  'receiver-rewards': number;
+  'round-time': number;
+  'sender': string;
+  'sender-acc-rewards': number;
+  'sender-balance': number;
+  'sender-rewards': number;
+  'sender-tx-counter': number;
+  'signature': {
+    'sig': string;
+  }[];
+  'tx-type': string;
+}
+
 export interface AccountInformation {
   address: string;
   amount: number;
@@ -45,6 +148,7 @@ export interface AccountInformation {
   };
   'apps-total-extra-pages': number;
   assets: AccountAssetInformation[];
+  transactions: AccountTransactionInformation[];
   'total-assets-opted-in': number;
   'created-apps': {
     id: number;
@@ -135,6 +239,13 @@ export interface AssetInformation {
   params: AssetParams;
 }
 
+
+export interface TransactionInformation {
+  'current-round': number;
+  'next-token': string;
+  transactions: AccountTransactionInformation[];
+}
+
 interface AccountProviderProps {
   children: JSX.Element | JSX.Element[];
 }
@@ -145,8 +256,11 @@ const AccountContext = createContext<AccountContextValue | undefined>(
 
 export type AssetCache = Record<string, Record<number, AssetParams>>;
 
+export type TransactionCache = Record<string, Record<number, AccountTransactionInformation[]>>;
+
 interface AccountContextValue {
   assets: Record<number, AssetParams>;
+  transactions: Record<number, AccountTransactionInformation[]>;
   account: AccountInformation | null;
   refreshAccount: () => void;
 }
@@ -157,7 +271,47 @@ export const AccountProvider: React.FC<AccountProviderProps> = ({
   const { state } = useStore();
   const [account, setAccount] = useState<AccountInformation | null>(null);
   const [assets, setAssets] = useLocalState<AssetCache>('assets', {});
+  const [transactions, setTransactions] = useLocalState<TransactionCache>('transactions', {});
   const flagRef = useRef<number>(0);
+
+  const updateAccountTransactions = useCallback(async () => {
+    const networkId = state.network.id;
+    const txns = [];
+    if (networkId && account) {
+      const chunkSize = 5;
+      const unknownTransactions = account.transactions?.filter(
+        (a) => !transactions[networkId] || !transactions[networkId][a['index']]
+      );
+      for (let i = 0; i < unknownTransactions?.length; i += chunkSize) {
+        const chunk = unknownTransactions.slice(i, i + chunkSize);
+        const updates: (TransactionInformation | null)[] = (await Promise.all([
+          ...chunk.map(
+            (a) =>
+              new Promise(async (resolve) => {
+                 await state.indexer
+                .searchForTransactions()
+                .address(account.address)
+                .do()
+                .then(resolve)
+                .catch(() => resolve(null));
+              })
+          ),
+        ])) as (TransactionInformation | null)[];
+        setTransactions((a) => {
+          const newTransactions = { ...a };
+          if (!newTransactions[networkId]) newTransactions[networkId] = {};
+          updates.forEach((u) => {
+            if (u !== null) newTransactions[networkId][0] = u.transactions;
+          });
+          return newTransactions;
+        });
+      }
+    }
+  }, [account]);
+
+  useEffect(() => {
+    updateAccountTransactions();
+  }, [updateAccountTransactions]);
 
   const updateAccountAssets = useCallback(async () => {
     const networkId = state.network.id;
@@ -204,6 +358,27 @@ export const AccountProvider: React.FC<AccountProviderProps> = ({
         const account = await state.node
           .accountInformation(state.primaryAddress)
           .do();
+
+        const networkId = state.network.id;
+        const updates: (TransactionInformation | null)[] = (await Promise.all([
+              new Promise(async (resolve) => {
+                await state.indexer
+                .searchForTransactions()
+                .address(account.address)
+                .do()
+                .then(resolve)
+                .catch(() => resolve(null));
+              })
+        ])) as (TransactionInformation | null)[];
+        setTransactions((a) => {
+            const newTransactions = { ...a };
+            if (!newTransactions[networkId]) newTransactions[networkId] = {};
+            updates.forEach((u) => {
+              if (u !== null) newTransactions[networkId][0] = u.transactions;
+            });
+            return newTransactions;
+          });
+
         if (thisFlag === flagRef.current) {
           setAccount(account as AccountInformation);
         }
@@ -227,6 +402,7 @@ export const AccountProvider: React.FC<AccountProviderProps> = ({
         account,
         refreshAccount: fetchData,
         assets: assets[state.network.id] || {},
+        transactions: transactions[state.network.id] || {},
       }}
     >
       {children}
