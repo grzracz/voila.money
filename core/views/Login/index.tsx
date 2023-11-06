@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Lottie from 'react-lottie';
+import Lottie from 'lottie-react';
 import * as animationDark from '../../assets/logo-dark-animation.json';
 import * as animationLight from '../../assets/logo-light-animation.json';
 import { ActionTypes, useStore } from '../../utils/store';
@@ -101,13 +101,11 @@ const Login: React.FC = () => {
   return (
     <div className="flex flex-col justify-center items-center">
       <Lottie
-        options={{
-          loop: false,
-          autoplay: true,
-          animationData: isDark ? animationDark : animationLight,
-          rendererSettings: {
-            preserveAspectRatio: 'xMidYMid slice',
-          },
+        loop={false}
+        autoplay={true}
+        animationData={isDark ? animationDark : animationLight}
+        rendererSettings={{
+          preserveAspectRatio: 'xMidYMid slice',
         }}
         height={state.display === 'tab' ? 400 : 240}
         width={state.display === 'tab' ? 400 : 240}
