@@ -19,7 +19,7 @@ const Sidebar: React.FC<{ disabled: boolean }> = ({ disabled }) => {
         IconComponent={FaImages}
         name={t('components.Sidebar.NFTs', 'NFTs')}
         to="/nfts"
-        disabled={true}
+        disabled={disabled}
       />
       <SidebarLink
         IconComponent={FaSearch}
@@ -31,7 +31,7 @@ const Sidebar: React.FC<{ disabled: boolean }> = ({ disabled }) => {
         IconComponent={FaClock}
         name={t('components.Sidebar.Activity', 'Activity')}
         to="/activity"
-        disabled={true}
+        disabled={disabled}
       />
     </aside>
   );

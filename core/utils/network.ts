@@ -132,9 +132,9 @@ export const getNodeClient = (network: Network) => {
 
 export const getIndexerClient = (network: Network) => {
   return new algosdk.Indexer(
-    network.node.token,
-    network.node.server,
-    network.node.port
+    network.indexer.token,
+    network.indexer.server,
+    network.indexer.port
   );
 };
 

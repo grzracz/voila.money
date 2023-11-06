@@ -35,7 +35,7 @@ const NetworkSettings: React.FC = () => {
       options={Object.keys(NETWORKS).map((network) => ({
         id: network,
         content: (
-          <div className="flex space-x-2 items-center justify-between text-center dark:bg-white bg-black bg-opacity-5 dark:bg-opacity-5 rounded-lg p-2">
+          <div key={network} className="flex space-x-2 items-center justify-between text-center dark:bg-white bg-black bg-opacity-5 dark:bg-opacity-5 rounded-lg p-2">
             <div className="flex space-x-2 items-center">
               {NetworkIcon(NETWORKS[network])()}
               <span className="font-bold">{NETWORKS[network].name}</span>

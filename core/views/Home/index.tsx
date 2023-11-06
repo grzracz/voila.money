@@ -95,6 +95,7 @@ const Home: React.FC = () => {
                 holdingAssets.map((a: any) => (
                   <AssetBar
                     id={a['asset-id']}
+                    key={a['asset-id']}
                     assets={assets}
                     amount={a['amount']}
                   />
@@ -111,6 +112,7 @@ const Home: React.FC = () => {
               {emptyAssets.map((a: any) => (
                 <AssetBar
                   id={a['asset-id']}
+                  key={a['asset-id']}
                   assets={assets}
                   amount={a['amount']}
                 />
