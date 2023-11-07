@@ -22,35 +22,37 @@ const Accounts: React.FC = () => {
     description: string;
     disabled?: boolean;
   }> = ({ title, url, description, icon, disabled }) => (
-    <NavLink
-      title={title}
-      to={url}
-      className={disabled ? 'opacity-50 pointer-events-none' : undefined}
-    >
-      <Card
-        className="max-w-[280px] flex flex-row items-center text-center md:text-left md:items-start md:flex-col"
-        disabled={disabled}
+    <div className='p-4'>
+      <NavLink
+        title={title}
+        to={url}
+        className={disabled ? 'opacity-50 pointer-events-none' : undefined}
       >
-        <div className="text-2xl md:text-4xl px-2 md:p-0 md:pb-4 blue">
-          {icon}
-        </div>
-        <div>
-          <h3 className="text-lg md:text-xl font-bold">{title}</h3>
-          <span className="px-2 md:px-0 md:text-sm font-light">
-            {description}
-          </span>
-        </div>
-      </Card>
-    </NavLink>
+        <Card
+          className="max-w-[280px] flex flex-row items-center text-center md:text-left md:items-start md:flex-col"
+          disabled={disabled}
+        >
+          <div className="text-2xl md:text-4xl px-2 md:p-0 md:pb-4 blue">
+            {icon}
+          </div>
+          <div>
+            <h3 className="text-lg md:text-xl font-bold">{title}</h3>
+            <span className="px-2 md:px-0 md:text-sm font-light">
+              {description}
+            </span>
+          </div>
+        </Card>
+      </NavLink>
+    </div>
   );
 
   return (
-    <div>
+    <div className='flex-col w-full justify-center'>
       <h1 className="font-bold text-center md:text-left text-3xl md:text-5xl py-4">
         Configure your <span className="blue">accounts</span>
       </h1>
-      <div className="space-y-2 md:space-y-8 md:py-8">
-        <div className="flex space-x-4 items-stretch items-top">
+      <div className="flex-col w-full justify-center text-center">
+        <div className="flex-col w-full">
           <ActionCard
             icon={<FaPlusSquare />}
             title="Create an account"
@@ -74,7 +76,7 @@ const Accounts: React.FC = () => {
         <div className="p-4 text-base md:text-lg text-center md:text-left text-gray-600 dark:text-gray-300">
           or
         </div>
-        <div className="flex space-x-4 items-stretch items-top">
+        <div className="flex-col">
           <ActionCard
             icon={<FaDownload />}
             title="Create a backup"
