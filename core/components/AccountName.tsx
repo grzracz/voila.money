@@ -28,7 +28,7 @@ const AccountName: React.FC<AccountNameProps> = ({
   return (
     <div
       className={classNames(
-        'cursor-pointer flex-col flex-wrap justify-center',
+        'cursor-pointer flex-col justify-center text-center',
         className
       )}
       onClick={copy}
@@ -37,12 +37,12 @@ const AccountName: React.FC<AccountNameProps> = ({
         {full ?
             address
           :
-            `${address?.slice(0, 4)}` + "..." + `${address?.slice(46, 50)}`
+            `${address?.slice(0, 4)}` + "..." + `${address?.slice(address.length - 4, address.length)}`
         }
       </div>
       <div
         className={classNames(
-          'text-sm opacity-80 flex-row justify-center',
+          'text-sm opacity-80 ',
           copied && 'pointer-events-none'
         )}
       >
