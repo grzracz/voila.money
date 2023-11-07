@@ -1,4 +1,3 @@
-import React from 'react';
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { useAccount, AccountTransactionInformation } from '../../utils/account';
 import TransactionCard from './TransactionCard';

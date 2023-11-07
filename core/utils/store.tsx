@@ -25,11 +25,11 @@ export interface Action {
 
 const initialState: State = {
   display: 'mobile',
-  network: NETWORKS.AlgorandMainnet,
+  network: NETWORKS.VoiTestnet,
   signedIn: false,
   addresses: [],
-  node: getNodeClient(NETWORKS.AlgorandMainnet),
-  indexer: getIndexerClient(NETWORKS.AlgorandMainnet),
+  node: getNodeClient(NETWORKS.VoiTestnet),
+  indexer: getIndexerClient(NETWORKS.VoiTestnet),
 };
 
 export const ActionTypes = {
@@ -82,7 +82,7 @@ interface StoreProviderProps {
 
 const initializeStore = (display: 'tab' | 'extension' | 'mobile'): State => {
   const network = getNetwork(
-    window.localStorage.getItem('network') || 'AlgorandMainnet'
+    window.localStorage.getItem('network') || 'VoiTestnet'
   );
   const node = getNodeClient(network);
   const indexer = getIndexerClient(network);

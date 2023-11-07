@@ -34,59 +34,6 @@ export type Network = {
 };
 
 export const NETWORKS: Record<string, Network> = {
-  AlgorandMainnet: {
-    id: 'AlgorandMainnet',
-    name: 'Algorand',
-    description: 'Algorand Mainnet Network',
-    genesisId: 'mainnet-v1.0',
-    isMainnet: true,
-    token: {
-      name: 'Algorand',
-      ticker: 'ALGO',
-      decimals: 6,
-      svg: algorandTokenSvg,
-      png: algorandTokenPng,
-    },
-    node: {
-      token: '',
-      server: 'https://mainnet-api.algonode.cloud',
-      port: 443,
-      description: 'Free global API provided by AlgoNode.io',
-    },
-    indexer: {
-      token: '',
-      server: 'https://mainnet-idx.algonode.cloud',
-      port: 443,
-      description: 'Free global API provided by AlgoNode.io',
-    },
-  },
-  AlgorandTestnet: {
-    id: 'AlgorandTestnet',
-    name: 'Algorand',
-    description: 'Algorand Testnet Network',
-    genesisId: 'testnet-v1.0',
-    isMainnet: false,
-    token: {
-      name: 'Algorand',
-      ticker: 'ALGO',
-      decimals: 6,
-      svg: algorandTokenSvg,
-      png: algorandTokenPng,
-    },
-    node: {
-      token: '',
-      server: 'https://testnet-api.algonode.cloud',
-      port: 443,
-      description: 'Free global API provided by AlgoNode.io',
-    },
-    indexer: {
-      token: '',
-      server: 'https://testnet-idx.algonode.cloud',
-      port: 443,
-      description: 'Free global API provided by AlgoNode.io',
-    },
-    faucet: 'https://bank.testnet.algorand.network/',
-  },
   VoiTestnet: {
     id: 'VoiTestnet',
     name: 'Voi',
@@ -113,12 +60,65 @@ export const NETWORKS: Record<string, Network> = {
       description: 'Free Indexer API provided by AlgoNode.io',
     },
   },
+  // AlgorandMainnet: {
+  //   id: 'AlgorandMainnet',
+  //   name: 'Algorand',
+  //   description: 'Algorand Mainnet Network',
+  //   genesisId: 'mainnet-v1.0',
+  //   isMainnet: true,
+  //   token: {
+  //     name: 'Algorand',
+  //     ticker: 'ALGO',
+  //     decimals: 6,
+  //     svg: algorandTokenSvg,
+  //     png: algorandTokenPng,
+  //   },
+  //   node: {
+  //     token: '',
+  //     server: 'https://mainnet-api.algonode.cloud',
+  //     port: 443,
+  //     description: 'Free global API provided by AlgoNode.io',
+  //   },
+  //   indexer: {
+  //     token: '',
+  //     server: 'https://mainnet-idx.algonode.cloud',
+  //     port: 443,
+  //     description: 'Free global API provided by AlgoNode.io',
+  //   },
+  // },
+  // AlgorandTestnet: {
+  //   id: 'AlgorandTestnet',
+  //   name: 'Algorand',
+  //   description: 'Algorand Testnet Network',
+  //   genesisId: 'testnet-v1.0',
+  //   isMainnet: false,
+  //   token: {
+  //     name: 'Algorand',
+  //     ticker: 'ALGO',
+  //     decimals: 6,
+  //     svg: algorandTokenSvg,
+  //     png: algorandTokenPng,
+  //   },
+  //   node: {
+  //     token: '',
+  //     server: 'https://testnet-api.algonode.cloud',
+  //     port: 443,
+  //     description: 'Free global API provided by AlgoNode.io',
+  //   },
+  //   indexer: {
+  //     token: '',
+  //     server: 'https://testnet-idx.algonode.cloud',
+  //     port: 443,
+  //     description: 'Free global API provided by AlgoNode.io',
+  //   },
+  //   faucet: 'https://bank.testnet.algorand.network/',
+  // },
 };
 
 export const getNetwork = (id: string): Network => {
   return getLocalState<Network>(
     `network-${id}`,
-    NETWORKS[id] || NETWORKS.AlgorandMainnet
+    NETWORKS[id] || NETWORKS.VoiTestnet
   );
 };
 
