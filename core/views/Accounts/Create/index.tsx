@@ -48,40 +48,48 @@ const Create: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <div className='flex-col text-center justify-center'>
       <h1 className="font-bold text-center md:text-left text-3xl md:text-5xl py-4">
         Create an <span className="blue">account</span>
       </h1>
-      <div className="flex w-full items-center justify-center flex-col space-y-8 py-16">
-        <div className="flex space-x-2 items-center">
-          <Avatar content={account?.addr || ''} className="max-w-[160px]" />
-          <IconButton
-            IconComponent={FaRedo}
-            name="Recreate"
-            onClick={createAccount}
-          />
+      <div className="w-full justify-center flex-col">
+        <div className="flex-col pb-6">
+          <div className='flex justify-center pb-4'>
+            <Avatar content={account?.addr || ''} className="max-w-[160px]" />
+          </div>
+          <div className='flex justify-center'>
+            <IconButton
+              IconComponent={FaRedo}
+              name="Recreate"
+              onClick={createAccount}
+            />
+          </div>
         </div>
-        <div className="flex flex-col items-center justify-center">
-          <span className="opacity-80">Public address:</span>
-          <AccountName address={account?.addr || ''} className="text-xl" />
-          <span className="opacity-80 pt-4">
+        <div className="flex flex-col justify-center">
+          <div className="opacity-80">Public address:</div>
+          <AccountName full={false} address={account?.addr || ''} className="text-xl" />
+          <div className="opacity-80 pt-4">
             Your private key will be securely stored in a backup file
-          </span>
+          </div>
         </div>
-        <div className="p-4 flex space-x-4">
-          <Link to={'/accounts'}>
-            <IconButton IconComponent={FaChevronLeft} name="Cancel">
-              <span>Back</span>
+        <div className="p-4 flex justify-between">
+          <div className='w-1/3'>
+            <Link to={'/accounts'}>
+              <IconButton IconComponent={FaChevronLeft} name="Cancel">
+                <div>Back</div>
+              </IconButton>
+            </Link>
+          </div>
+          <div className='w-1/3'>
+            <IconButton
+              onClick={saveAccount}
+              IconComponent={FaSave}
+              name="Save"
+              primary
+            >
+              <div>Save</div>
             </IconButton>
-          </Link>
-          <IconButton
-            onClick={saveAccount}
-            IconComponent={FaSave}
-            name="Save"
-            primary
-          >
-            <span>Save</span>
-          </IconButton>
+          </div>
         </div>
       </div>
     </div>

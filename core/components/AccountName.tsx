@@ -28,40 +28,31 @@ const AccountName: React.FC<AccountNameProps> = ({
   return (
     <div
       className={classNames(
-        'flex space-x-2 items-center relative cursor-pointer',
+        'cursor-pointer flex-col flex-wrap justify-center',
         className
       )}
       onClick={copy}
     >
-      <div className="flex items-center pointer-event-none select-none">
-        <b>{address?.slice(0, 4)}</b>
-        <span className="opacity-80">{address?.slice(4, 8)}</span>
-        <span className="opacity-50">
-          {full
-            ? address?.slice(8, 50)
-            : `${address?.slice(8, 12)}⋯${address?.slice(46, 50)}`}
-        </span>
-        <span className="opacity-80">{address?.slice(50, 54)}</span>
-        <b>{address?.slice(54)}</b>
+      <div className="opacity-50 text-sm overflow-auto">
+        {full ?
+            address
+          :
+            `${address?.slice(0, 4)}` + "..." + `${address?.slice(46, 50)}`
+        }
       </div>
-      <div className="absolute top-[2px] right-[-16px]">
+      <div
+        className={classNames(
+          'text-sm opacity-80 flex-row justify-center',
+          copied && 'pointer-events-none'
+        )}
+      >
         <div
           className={classNames(
-            'text-sm opacity-80 flex space-x-1 items-center relative',
-            copied && 'pointer-events-none'
+            'text-xs pointer-events-none',
+            copied ? 'opacity-80' : 'opacity-0'
           )}
         >
-          <FaCopy
-            className={classNames('hover:opacity-60', copied && 'opacity-20')}
-          />
-          <span
-            className={classNames(
-              'pl-3 text-xs absolute pointer-events-none',
-              copied ? 'opacity-80' : 'opacity-0'
-            )}
-          >
-            Copied!
-          </span>
+          Copied!
         </div>
       </div>
     </div>

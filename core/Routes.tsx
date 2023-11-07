@@ -25,7 +25,7 @@ const Routes: FC = () => {
   return (
     <HashRouter>
       <div
-        className="flex flex-col overflow-hidden relative pb-[64px] md:pb-0"
+        className="flex flex-col overflow-hidden relative pb-[64px]"
         style={{
           minHeight: state.display === 'extension' ? '600px' : '100vh',
           height: state.display === 'extension' ? '600px' : '100vh',
@@ -38,10 +38,10 @@ const Routes: FC = () => {
         <Navbar />
         {state.addresses.length > 0 && <AccountHeader />}
         {state.signedIn ? (
-          <div className="flex-grow h-full overflow-x-hidden overflow-y-auto flex text-sm">
+          <div className="h-full w-full overflow-y-auto flex-col text-sm">
             <Sidebar disabled={state.addresses.length === 0} />
             <div className="p-2 md:p-4 w-full flex justify-center">
-              <div className="w-full max-w-screen-2xl">
+              <div className="w-full max-w-full px-4">
                 <BrowserRoutes>
                   <Route
                     index
