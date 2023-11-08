@@ -49,8 +49,8 @@ const Home: React.FC = () => {
     <Loader />
   ) : (
     <div>
-      <div className="flex flex-col justify-center items-start space-y-8">
-        <div className="w-full max-w-screen-lg">
+      <div className="w-full flex-col justify-center space-y-8">
+        <div className="w-full">
           <AssetBar
             id={0}
             assets={assets}
