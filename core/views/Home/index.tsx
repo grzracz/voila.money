@@ -83,6 +83,11 @@ const Home: React.FC = () => {
             </div>
           )}
         </div>
+        <div className="flex w-full justify-center">
+          <Link to="opt">
+            <IconButton IconComponent={FaPlus} name="Add assets" />
+          </Link>
+        </div>
         {(account?.amount || 0) > 0 && (
           <>
             <div className="w-full flex-col space-y-2 justify-center">
@@ -104,11 +109,6 @@ const Home: React.FC = () => {
                   </Card>
                 </div>
               )}
-              <div className="flex w-full justify-center">
-                <Link to="opt">
-                  <IconButton IconComponent={FaPlus} name="Add assets" />
-                </Link>
-              </div>
             </div>
             <div className="flex w-full max-w-screen-lg flex-col space-y-2">
               {emptyAssets.map((a: any) => (

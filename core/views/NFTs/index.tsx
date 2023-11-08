@@ -65,12 +65,12 @@ const NFTs: React.FC = () => {
       <div className="flex flex-col justify-center items-start space-y-8">
         {(account?.amount || 0) > 0 && (
           <>
+            <div className="flex w-full items-center justify-center">
+              <Link to="opt">
+                <IconButton IconComponent={FaPlus} name="Add assets" />
+              </Link>
+            </div>
             <div className="flex w-full max-w-screen-lg flex-col space-y-2">
-              {/* <div className="flex w-full items-center justify-end">
-                <Link to="opt">
-                  <IconButton IconComponent={FaPlus} name="Add assets" />
-                </Link>
-              </div> */}
               {holdingAssets.length > 0 ? (
                 holdingAssets.map((a: any) => (
                   <AssetCard
