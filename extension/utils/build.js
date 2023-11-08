@@ -1,5 +1,5 @@
-process.env.BABEL_ENV = 'production';
-process.env.NODE_ENV = 'production';
+process.env.BABEL_ENV = 'development';
+process.env.NODE_ENV = 'development';
 process.env.ASSET_PATH = '/';
 
 var webpack = require('webpack'),
@@ -10,7 +10,7 @@ var webpack = require('webpack'),
 
 delete config.chromeExtensionBoilerplate;
 
-config.mode = 'production';
+config.mode = 'development';
 
 var packageInfo = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
 
