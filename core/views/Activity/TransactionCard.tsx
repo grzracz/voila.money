@@ -14,7 +14,7 @@ interface TransactionCardProps {
 
 const TransactionCard: React.FC<TransactionCardProps> = ({ id, amount, assetId, transaction }) => {
   const { state } = useStore();
-  const [assetDecimal, setAssetDecimal] = useState(0);
+  const [assetDecimal, setAssetDecimal] = useState(6);
   const [assetUnitName, setAssetUnitName] = useState('');
   
     useEffect(() => {
@@ -71,7 +71,7 @@ const TransactionCard: React.FC<TransactionCardProps> = ({ id, amount, assetId, 
         </div>
         <div className="flex items-end space-x-2 px-2">
           <span className="text-xs opacity-70">Fee</span>
-          <span className="text-xs opacity-70">{txFee} A</span>
+          <span className="text-xs opacity-70">{txFee} V</span>
         </div>
       </div>
     </Card>
