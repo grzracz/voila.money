@@ -11,7 +11,7 @@ node_modules
 build
 
 # zip
-/zip
+extension/zip/
 
 # misc
 .DS_Store
