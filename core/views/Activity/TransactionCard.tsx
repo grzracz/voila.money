@@ -4,9 +4,10 @@ import Amount from '../../components/Amount';
 import Card from '../../components/Card';
 import { classNames } from '../../utils/common';
 import { useStore } from '../../utils/store';
+import CopiableText from '../../components/CopiableText';
 
 interface TransactionCardProps {
-  id: number;
+  id: string;
   amount: number;
   assetId: number;
   transaction: AccountTransactionInformation;
@@ -60,7 +61,12 @@ const TransactionCard: React.FC<TransactionCardProps> = ({ id, amount, assetId, 
         <div>
           <div className="text-base font-bold">{txType || 'Unknown'}</div>
           <div className="space-x-2 opacity-80 font-mono">
-            <span className="text-xs opacity-70">{id}</span>
+            <span className="text-xs opacity-70">
+              <CopiableText
+                text={id}
+                showCopiedText={false}
+              />
+            </span>
           </div>
         </div>
       </div>

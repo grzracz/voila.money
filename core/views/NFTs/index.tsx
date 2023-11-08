@@ -5,7 +5,7 @@ import Card from '../../components/Card';
 import { useAccount, AccountAssetInformation } from '../../utils/account';
 import Loader from '../../components/Loader';
 import { FaExclamationTriangle, FaKey, FaPlus } from 'react-icons/fa';
-import AccountName from '../../components/AccountName';
+import CopiableText from '../../components/CopiableText';
 import IconButton from '../../components/IconButton';
 import { Link } from 'react-router-dom';
 

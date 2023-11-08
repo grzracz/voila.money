@@ -6,7 +6,7 @@ import IconButton from './IconButton';
 import { FaEllipsisH } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import AccountName from './AccountName';
+import CopiableText from './CopiableText';
 
 const AccountHeader: React.FC = () => {
   const storage = useSecureStorage();
@@ -56,9 +56,9 @@ const AccountHeader: React.FC = () => {
             ))}
           </div>
           <div className="pt-4 px-2">
-            <AccountName
+            <CopiableText
               className="text-sm"
-              address={tempAddress || state.primaryAddress}
+              text={tempAddress || state.primaryAddress}
             />
           </div>
         </div>
