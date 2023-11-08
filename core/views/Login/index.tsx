@@ -125,7 +125,7 @@ const Login: React.FC = () => {
                   'Set up your password - at least 8 characters'
                 )}
           </h1>
-          <div className="text-center pt-8 flex space-x-2 items-center">
+          <div className="text-center flex items-center">
             <Input
               icon={<FaLock />}
               type="password"

@@ -68,11 +68,18 @@ const Create: React.FC = () => {
         <div className="flex flex-col justify-center">
           <div className="opacity-80">Public address:</div>
           <AccountName full={false} address={account?.addr || ''} className="text-xl" />
-          <div className="opacity-80 pt-4">
-            Your private key will be securely stored in a backup file
-          </div>
+          <div className="opacity-80">Mnemonic:</div>
+          {account?.sk ?
+            <AccountName full={false} address={algosdk.secretKeyToMnemonic(account?.sk) || ''} className="text-xl" />
+            :
+            null
+          }
+        </div>
+        <div className="opacity-80 pt-4">
+          Your private key will be securely stored in a backup file
         </div>
         <div className="p-4 flex justify-between">
+
           <div className='w-1/3'>
             <Link to={'/accounts'}>
               <IconButton IconComponent={FaChevronLeft} name="Cancel">
